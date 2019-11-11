@@ -1,33 +1,33 @@
 module.exports = {
   siteMetadata: {
-    title: `Novela by Narative`,
-    name: `Narative`,
-    siteUrl: `https://novela.narative.co`,
-    description: `This is my description that will be used in the meta tags and important for search results`,
+    title: `React State of Mind`,
+    name: `Eric S Bishard`,
+    siteUrl: `https://reactstateofmind.com`,
+    description: `React State of Mind is a blog and portfolio site for Eric Bishard (@httpJunkie)`,
     hero: {
-      heading: `Welcome to Novela, the simplest way to start publishing with Gatsby.`,
+      heading: `A React State of Mind`,
       maxWidth: 652,
     },
     social: [
       {
         name: `twitter`,
-        url: `https://twitter.com/narative`,
+        url: `https://twitter.com/httpjunkie`
       },
       {
         name: `github`,
-        url: `https://github.com/narative`,
-      },
-      {
-        name: `instagram`,
-        url: `https://instagram.com/narative.co`,
+        url: `https://github.com/httpjunkie`
       },
       {
         name: `linkedin`,
-        url: `https://www.linkedin.com/company/narative/`,
+        url: `https://www.linkedin.com/in/eric-b/`
       },
       {
-        name: `dribbble`,
-        url: `https://dribbble.com/narativestudio`,
+        name: `stackoverflow`,
+        url: `https://stackoverflow.com/users/2623804/eric-bishard`
+      },
+      {
+        name: `medium`,
+        url: `https://medium.com/@httpjunkie`
       },
     ],
   },
@@ -56,6 +56,23 @@ module.exports = {
         display: `standalone`,
         icon: `src/assets/favicon.png`,
       },
+    },
+    {
+    resolve: `gatsby-plugin-prefetch-google-fonts`,
+      options: {
+        fonts: [
+          {
+            family: `Rubik Mono One`,
+            variants: [`400`],
+            subsets: [`latin`]
+          },
+          {
+            family: `Rubik`,
+            variants: [`400`,`500`,`700`],
+            subsets: [`latin`]
+          }
+        ]
+      }
     },
   ],
 };
