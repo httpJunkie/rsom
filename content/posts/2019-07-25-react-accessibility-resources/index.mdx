@@ -6,3 +6,74 @@ date: 2019-09-20
 hero: ./images/hero.jpg
 excerpt: React does a lot out of the box when it comes to making our websites more accessible...
 ---
+
+React does a lot for us as developers out of the box when it comes to making our websites more accessible, but the onus is still on us to ensure that we create a final product that doesn't wreak of inaccessibility. I'm no expert on this subject, but I did stay at a Holiday Inn Express last night and I  had my [Read Aloud chrome extension](https://chrome.google.com/webstore/detail/read-aloud-a-text-to-spee/hdhinadidafjejdhmfkjgnolgimiaplp?hl=en) read me an article that one of my colleagues wrote: ([Web Accessibility Guidebook for Developers](https://www.telerik.com/blogs/web-accessibility-guidebook-for-developers)).
+
+I am a twenty-year web developer with a hearty knowledge of React, you would think I know a lot of this stuff by proxy, but after diving into the topic this past few weeks I have realized that I am grossly ignorant of many techniques and a majority of the arias that can help me to build applications and components that give greater access. My first stop to learn more on this journey was the [React JS documentation](https://reactjs.org/docs/accessibility.html).
+
+## React Documentation on Accessibility
+
+The [reactjs.org accessibility documentation](https://reactjs.org/docs/accessibility.html) should be a React developer's first stop when tackling accessibility. Although the most important links in that document have nothing to do with React, they are pages like Web AIM, the WCAG checklist & A11y Project checklists. Information on WAI-ARIA, the support they have in JSX and other resources that deal with helping you write semantic HTML like the MDN HTML elements reference.
+
+Some of the things that the ReactJS documentation for accessibility gets right is that they push you to use semantic HTML and to code as close to HTML as possible, even the most complex of scenarios. The great thing about React that lends itself to accessibility is that it's focused on components. This means that even the most complex of widgets can be broken down into simple components and an iterative approach can be taken to ensure you don't lose track of how accessible your application is.
+
+Now that we have that out of the way. Let's talk about some of the additional tools and components that can help you build more accessible applications in React.
+
+## Accessible Tools for Development in React
+
+One of the most important tools you can use as a developer in React is the [react-a11y](https://github.com/reactjs/react-a11y). Built by Ryan Florence who has been a major proponent for access in React applications through projects like [Reach UI](https://ui.reach.tech/), you can now lint your application by running [eslint-plugin-jsx-a11y](https://github.com/evcohen/eslint-plugin-jsx-a11y) in conjunction with Ryan's react-a11y. You can check out the [supported rules]() for an idea of what you can opt-in for warnings and errors when developing in React. This goes a long way to ensuring that you are thinking about accessibility during the development process.
+
+One thing I should mention that I learned in the React documentation is that [Create React App](https://facebook.github.io/create-react-app/) has this plugin with some of the rules activated upon project initialization.
+
+## Accessible React Components
+
+### React Document Title
+
+One thing you can do out of the gate in your application is to always ensure you are managing your document title, check out Dan Abramov's [React Document Title](https://github.com/gaearon/react-document-title). This ensures that the user is aware of the current page or React route's document title.
+
+### React ARIA Live
+
+Outlined in the following article ([ARIA live regions in React](https://almerosteyn.com/2017/09/aria-live-regions-in-react)) we understand the challenges of creating live announcements using [ARIA Live Regions](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions) for creating messages for screen readers. The tricky part covered in this article is that changes to content will only be read out by screen readers if the entire region already exists in the DOM and there have been changes. In React, we need to ensure that a live region is rendered before we send our first message and that it stays rendered until its no longer required. Luckily for us, the author of this article [Almero Steyn](https://twitter.com/kryptos_rsa) has created a suite of components called [react-aria-live](https://github.com/AlmeroSteyn/react-aria-live) that you can install with npm. 
+
+I recommended you read through the article first and then the [GitHub readme](https://github.com/AlmeroSteyn/react-aria-live#readme) for a better understanding of the subject. 
+
+### React Focus On
+
+A full solution for WAI-ARIA compatible Modal Dialogs or any full-screen tasks, I first learned about this solution by digging into [react-focus-lock](https://github.com/theKashey/react-focus-lock) which does exactly what it says, it sets up different isolated locks and allows tabbing from one to another. I then realized that it was just one part of a larger solution that also uses [react-remove-scroll](https://github.com/theKashey/react-remove-scroll) to disable page scroll and user interactions and [aria-hidden](https://github.com/theKashey/aria-hidden) to hide the rest of a page from screen readers. If you are using these components you probably have bought into largely making your site very accessible to screen readers and the time to do this as we have said before is during the development phase and not as a bolt-on afterthought. Check out a [live demo using all of these components](https://p3vjp8mzw7.codesandbox.io/)
+
+### Reach UI
+
+[Reach UI](https://ui.reach.tech) is a suite of UI components that deal directly with accessibility before anything else, so much in fact that the documentation on the Reach UI website cites the W3.org WAI-ARIA authoring practices at the top of each page. The home page says that it seeks to become the accessible foundation of your React-based design system and that it’s early in its development phase, so there isn’t a whole lot there yet. I think that is being a bit humble because they have almost ten UI components that are built from the ground up with accessibility in mind. As they mentioned, you don't come here for fully styled and amazingly complex UI components, instead what Ryan would rather you do with his library is to use it as a starting point for your design system.
+
+### KendoReact
+
+So I have been very impressed with the [KendoReact](https://www.telerik.com/kendo-react-ui) team's components and their devotion to making them accessible. Mostly because our components are very complex, so I know it's continuously challenging for them, but they prioritize this very high. We build our components from the ground up with accessibility in mind and you can find out about all of the measures we take into consideration when building our components here on our [KendoReact Accessibility Overview page](https://www.telerik.com/kendo-react-ui/components/accessibility/). As well, we are interested in hearing from the React community on anything that we can do better to make our components more accessible.
+
+## Podcasts
+
+before I wrap up, I wanted to leave you with some amazing React and Web Development podcasts that deal with the issue of accessibility. I'm a huge podcast fan and I could probably list over a hundred podcasts that deal with this topic, but I wanted to just give you a few that will help you both understand accessibility from a better perspective, like from an expert. As well some podcasts on the subject that deal directly with application development.
+
+### React Podcast
+
+- [Get Access with Aaron Cannon](https://reactpodcast.simplecast.fm/54)
+- [Just Use a Button with Jen Luker](https://reactpodcast.simplecast.fm/34)
+- [Promise Accessibility with Ryan Florence](https://reactpodcast.simplecast.fm/22)
+- [Fast, Accessible, and Beautiful Drag and Drop with Alex Reardon](https://reactpodcast.simplecast.fm/17)
+
+### React Roundup
+- [Accessibility is not a “React Problem” with Leslie Cohn-Wein](https://devchat.tv/react-round-up/rru-066-accessibility-is-not-a-%E2%80%9Creact-problem%E2%80%9D-with-leslie-cohn-wein/)
+
+### ShopTalk Show
+- [Accessibility with Nicolas Steenhout and Christopher Schmitt](https://shoptalkshow.com/episodes/367/)
+- [Accessibility with Heydon Pickering](https://shoptalkshow.com/episodes/355/)
+- [Color Accessibility with Geri Coady](https://shoptalkshow.com/episodes/272-color-accessibility-geri-coady/)
+
+### The Big Web Show
+- [Color Accessibility Workflows with Geri Coady](http://5by5.tv/bigwebshow/160)
+- [Accessibility is not a “nice to have” – with Derek Featherstone](http://5by5.tv/bigwebshow/184)
+
+## Conclusion
+
+Just like any of these tools or components, nothing is going to be a silver bullet for accessibility, in fact, I'm not sure anyone has built a completely accessible website ever, there are always disabilities and conditions that are going to pose challenges for humans to use computers and applications on the web. but by taking some of these measures and testing your sites with screen readers like [NVDA](https://webaim.org/articles/nvda/) or the [WAVE Evaluation Tool](https://chrome.google.com/webstore/detail/wave-evaluation-tool/jbbplnpkjmmeebjpijfedlgcdilocofh) so that you can evaluate the accessibility of your site. 
+
+I hope to use most of these tools and components in my current projects and write more on the subject, right now this is an exercise for me to learn more myself and see what I can do to improve my applications and teach others at the same time. Thanks for reading or listening to this article and if you have any ideas on how to improve this resource, just leave a comment and let me know. I will make the change and update the article!
