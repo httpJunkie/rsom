@@ -1,0 +1,47 @@
+---
+title: A Guide to Learning React Hooks
+author: Eric Bishard 
+date: 2019-09-20
+hero: ./images/hero.jpg
+excerpt: This guide provides background on React, state management, and serve as an exhaustive guide to the built in react hooks.
+---
+
+This guide will provide background on the history of React, state management, as well as serve as an exhaustive guide for learning the built-in Hooks that are part of React. Follow along, fork my code at any point as we learn the basics from local component state and effects to more advanced hooks like `useReducer` to manage lists of data amongst other things. Let's explore the fundamentals of React Hooks!
+
+## What You Will Learn
+
+In this article, you will learn how to use React Hooks for state and effects, context, reducers and custom hooks.
+
+## What You Should Know About Hooks
+
+Hooks were initially released in late October 2018 as a beta release and had already been used in production by Facebook for over a month ensuring that the community would not face major bugs and issues. To avoid large rewrites that break backward compatibility, they used a gradual migration and adoption strategy allowing the new API and the existing API and patterns to co-exist with one another.
+
+They are an additive change to React meaning they are opt-in and backward compatible, as well they have gone through an RFC process on GitHub before being released. If you want to use them, simply install the latest version of React and import them one-by-one.
+
+The Hooks pattern provides alternatives to writing in the standard class-based syntax for components and instead allows you to use state and lifecycle methods in functional components, once only available in classes. We can now work with React local state, effects, reducers and context through useState, useEffect useReducer and useContext.
+
+Additional Hooks include: useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect and useDebugValue. These APIs can be read about in the React Hooks API Reference!
+
+## So How Do We Use Hooks
+
+The easiest way to describe Hooks is to show side-by-side examples of a class component that needs to have access to state and lifecycle methods, and another example where we achieve the same thing with a functional component.
+
+Below I provide a working example similar to those in the ReactJS docs, but one that you can touch and play around with, getting your hands dirty with a StackBlitz demo for each stage of our learning. So let's stop talking and start learning about React Hooks.
+
+## The Benefits of Using Hooks
+
+Hooks have a lot of benefit to devs, they will change the way we write components for the better. They already help us write clear and concise code - it's like we went on a diet and lost some weight, now we're looking better and feeling lighter on our toes. It brings out our jawline and makes us feel better. Just look at what React Hooks have done for others!
+
+![](https://imgur.com/eh3Fme6.jpg)
+
+All kidding aside, Hooks do trim the fat. To demonstrate we'll check out a class version of the canonical “document title effect” seeing the difference between how we used to write something like this.
+
+The side-by-side below shows how our component has lost some weight. The readability has also improved with our changes. Switching existing code over to Hooks can have a big impact on the sheer volume of code you write and it's readability. Remember that Hooks is backward compatible and can live side by side with your older class-based components, This means there is no need to rewrite your codebase. Check out these StackBlitz demos for the code here: [Before](https://stackblitz.com/edit/react-state-hook-04?file=Counter.js) and [After](https://stackblitz.com/edit/react-custom-hook-npm?file=Counter.js)
+
+![](https://imgur.com/WVji79L.gif)
+
+I know that Hooks have been talked about and written about a lot here on dev.to, that's why I have created an exhaustive full-length guide that you can use to learn step-by-step. I have the examples above and sections on [State and Effects](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-hooks-for-state-and-effects), [Context](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-hooks-for-context), [Reducers](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-hooks-for-reducers), [Custom Hooks](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-custom-react-hooks) and [Managing Control State of Components](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-managing-control-state-of-a-kendoreact-component).
+
+It's all available in an easy to read resource and you can pick up reading right where we just left off here: [Guide to Learning React Hooks](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-hooks-for-state-and-effects).
+
+You can find articles like this one and others from me on the [Telerik.com/blogs](http://Telerik.com/blogs/author/eric-bishard) site!
