@@ -1,0 +1,94 @@
+---
+title: Preferred Color Scheme in React
+author: Eric Bishard 
+date: 2019-09-29
+hero: ./images/hero.jpg
+excerpt: This gives me an easy way to know if they prefer `'dark'` vs `'light'` on their device...
+---
+
+I have a demo that, on the fly, is able to swap the users theme from light to dark. It also remembers the persons last selected choice by saving that selection of `'dark'` or `'light'` to localStorage and checking there first when setting the theme on the next user visit.
+
+This is great, but users of iOS, Windows 10, Android and such have an option to set their preferred theme. Here is how I can do that in my Windows 10 machine.
+
+![](https://imgur.com/hcrfv3t.gif)
+
+## How to Read This Value in CSS (media queries)
+
+I was reading this post here on the Dev Community about ["Two Media Queries You Should Care About"](https://dev.to/selbekk/two-media-queries-you-should-care-about-2h5f) and it talks about how to use the [prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) media query:
+
+```css
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #111;
+    color: #eee;
+  }
+}
+```
+
+And this got me thinking. I already have the work done in my application to swap themes on the fly by user input (a switch) or by their last preferred selection that I have stored in `localStorage`.
+
+But before I look for their preferred theme in `localStorage` or in conjunction with that, I should be querying about the preferred color scheme of their device. Since I only know how to do this in CSS, shown above, I don't want to write something super hacky in JS. I found this article: [How to detect a user’s preferred color scheme in JavaScript](https://www.freecodecamp.org/news/how-to-detect-a-users-preferred-color-scheme-in-javascript-ec8ee514f1ef) which gives me a great idea of how to do this with React Hooks.
+
+## How to Read This Value in JS with a React Hook
+
+In the above article, a section called ["Reactive JS Approach"](https://www.freecodecamp.org/news/how-to-detect-a-users-preferred-color-scheme-in-javascript-ec8ee514f1ef#reactive-js-approach) gave me an even better idea of using JavaScript's `watchMedia()` method. This is great, but I already use a React Hook in my project that wraps the `watchMedia()` method and exposes it as a  React Hook.
+
+This library is called: `react-media-hook` and can be used like so:
+
+```js
+import { useMediaPredicate } from "react-media-hook";
+let breakpoint = useMediaPredicate("(min-width: 600px)") ? "medium" : "small";
+```
+
+In fact, that is exactly how I am using it for watching my `'small'` vs `'medium'` breakpoint. But instead of passing in a `min-width` query, I can pass in a `prefers-color-scheme` query instead.
+
+```js
+const preferredTheme = useMediaPredicate("(prefers-color-scheme: dark)") ? "dark" : "light";
+```
+
+This gives me an easy way to know if they prefer `'dark'` vs `'light'` on their device. I can keep this value as a string or boolean value and now I can easily determine this in my app with just a few lines of JS. 
+
+Below is an initial first stab at setting my theme. I use React ContextAPI and Hooks to set this value globally:
+
+```js
+import React, { useState, useEffect, createContext } from 'react';
+import { useMediaPredicate } from "react-media-hook";
+
+const AppContext = createContext();
+
+const AppProvider = props => {
+  const preferredTheme = useMediaPredicate('(prefers-color-scheme: dark)') ? 'dark' : 'light'
+  const [appData, setApp] = useState({
+
+    navOpen: false,
+    toggleSidenav: value => setApp(data => (
+      { ...data, navOpen: value }
+    )),
+
+    themeMode: localStorage.getItem(''kr-todo-theme') || preferredTheme,
+    changeTheme: mode => setApp(data => (
+      {...data, themeMode: mode }
+    )),
+
+  });
+  
+  useEffect(() => {
+    localStorage.setItem(''kr-todo-theme', appData.themeMode)
+    }, [appData.themeMode]
+  );
+  
+  return <AppContext.Provider value={appData}>{props.children}</AppContext.Provider>
+}
+
+export { AppContext, AppProvider };
+```
+
+To show this working, I can simulate the user hitting my app for the first time by removing their setting in localStorage. This will force my code to check the preferred theme, and base it's initial theme setting to `'dark'` if they prefer that, otherwise `'light'`.
+
+![](https://imgur.com/UkWRRfz.gif)
+
+Also, it will remember my last saved theme preference. So I like the idea of using the `prefers-color-scheme` as an indication as to what I should use so long as there are not user settings telling me they prefer otherwise.
+
+I hope you enjoyed this article and if you would like to see the full demo application working with [Kendo UI Sass theme Builder](https://themebuilder.telerik.com/kendo-react-ui) and [KendoReact Components](https://www.telerik.com/kendo-react-ui/), you can get that here: [GitHub.com/httpJunkie/kr-todo-hooks](https://github.com/httpJunkie/kr-todo-hooks). It's the same application I used as a demo at [ReactLiveNL](https://www.youtube.com/watch?v=B5bKxxaEsUs) in Amsterdam.
+
+I also have an exhaustive article on how to work with React Hooks. I go over [State and Effects](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-hooks-for-state-and-effects), [Context](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-hooks-for-context), [Reducers](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-hooks-for-reducers), [Custom Hooks](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-custom-react-hooks) and [Managing Control State of Components](https://www.telerik.com/kendo-react-ui/react-hooks-guide/#toc-managing-control-state-of-a-kendoreact-component).
