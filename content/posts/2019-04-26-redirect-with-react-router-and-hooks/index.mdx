@@ -1,0 +1,45 @@
+---
+title: Redirect with React Router and Hooks
+author: Eric Bishard 
+description: Based on a value controlled with a React Hook, redirect to a new route when the value is true
+date: 2019-09-20
+hero: ./images/hero.jpg
+excerpt: This guide provides background on React, state management, and serve as an exhaustive guide to the built in react hooks.
+---
+
+A lot of these short blog posts are just for me to find later when I forget how to do something, but I thought this little trick that you can do with React router was worth sharing.
+
+To set the stage, I have an application with routing and pages already set up.
+
+![Imgur](https://i.imgur.com/y01HqkX.png)
+
+
+One of the routes loads a Todo component in which I employ the `useReducer` hook in order to keep track of the todos state (local state). I have contrived a very simple feature that will redirect the user to the Home route once the Todos are cleared. Without thinking of all of the edge cases for this feature, I just want to get a basic redirect working using some basic logic, a quick and dirty example and we can iron the details out later if we want to.
+
+If we look at the `Todos.js` file, we will see that we have a function that calls `dispatch()` and sends `CLEAR_TODOS` as an action type to our reducer.
+
+![](https://i.imgur.com/tI1uX1Z.png)
+ 
+In my contrived example, I know that I want to at the very least redirect to Home once the user clicks on "CLEAR TODOS", in a better example I would notify the user (which I am not doing in this code) and then redirect to Home because our todo list is cleared. So what I want to do here is tap into a Hook that I will create which has a state variable named `toHome` and a related set/update method called `setToHome()`. The code below is a standard `useState` hook:
+
+![](https://i.imgur.com/We1yF3S.png)
+
+In order to make the page redirect when the `toHome` state variable is set to `true`, we just need to render a regular Redirect component from React Router and we will use a ternary statement to inline that component if true and if not, we will use `null` or render nothing:
+
+![](https://i.imgur.com/jEhMyIq.png)
+
+
+Here is a link to the specific commit that has this redirect setup: [4ed5c6](https://github.com/httpJunkie/react-todo/commit/4ed5c60e7a58ff021d31f05f557311eabd4a098d)
+
+As well a link to the overall example application, which by the way has some other cool responsive stuff going on, [check it out](https://github.com/httpJunkie/react-todo)!
+
+If you are new to Hooks and would like to read up on the subject, I have several articles that cover topics from Basic, Advanced and Custom Hooks as well as a talk on Hooks with links provided below if you are interested!
+
+*Articles on React Hooks*:
+[How to Use Basic React Hooks for State and Effects](https://www.telerik.com/blogs/how-to-use-basic-react-hooks-for-state-and-effects)
+[How to Use Basic React Hooks for Context](https://www.telerik.com/blogs/how-to-use-basic-react-hooks-for-context)
+[How to Use Basic React Hooks for Reducers](https://www.telerik.com/blogs/how-to-use-basic-react-hooks-for-reducers)
+[Everything You Need to Create a Custom React Hook](https://www.telerik.com/blogs/everything-you-need-to-create-a-custom-react-hook)
+
+*My Talk on React Hooks*:
+[Getting Hooked on React](https://www.youtube.com/watch?v=MfAxhBMTkuQ&t=15s)
