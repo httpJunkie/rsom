@@ -129,10 +129,16 @@ const ArticleBody = styled.article`
 
   ${mediaqueries.desktop`
     padding-left: 53px;
+    h2 {
+      max-width: 640px;
+    }
   `}
   
   ${mediaqueries.tablet`
     padding: 70px 0 80px;
+    h2 {
+      max-width: 486px;
+    }
   `}
 
   ${mediaqueries.phablet`
