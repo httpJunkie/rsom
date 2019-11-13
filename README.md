@@ -26,6 +26,16 @@ Novela is built by the team at [Narative](https://www.narative.co), and built fo
 
 This guide will take you through setting up Novela with Gatsby Starter Novela.
 
+## Breakpoint Reference
+
+- phone_small 320 
+- phone 376
+- phablet 540
+- tablet 735
+- desktop 1070
+- desktop_medium 1280
+- desktop_large 1440
+
 ### Step 1: Starter installation
 
 ##### With `gatsby-cli`:

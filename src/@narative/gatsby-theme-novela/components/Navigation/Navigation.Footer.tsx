@@ -49,12 +49,13 @@ function Footer() {
 
 export default Footer;
 
+/* RSOM Override Start */
 const FooterContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 80px;
+  padding-bottom: 50px;
   color: ${p => p.theme.colors.grey};
 
   .mirror{
@@ -83,10 +84,11 @@ const FooterContainer = styled.div`
     padding-bottom: 50px;
   `}
 `;
+/* RSOM Override End */
 
 const HoritzontalRule = styled.div`
   position: relative;
-  margin: 140px auto 50px;
+  margin: 25px auto 50px;
   border-bottom: 1px solid ${p => p.theme.colors.horizontalRule};
 
   ${mediaqueries.tablet`

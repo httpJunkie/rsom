@@ -32,7 +32,7 @@ const BioContainer = styled.div`
   left: -10px;
 `;
 
-/* RSOM Edit Start */
+/* RSOM Override Start */
 const BioAvatar = styled.div`
   display: block;
   position: relative;
@@ -73,7 +73,7 @@ const BioAvatarInner = styled.div`
   margin-right: 16px;
   overflow: hidden;
 `;
-/* RSOM Edit End */
+/* RSOM Override End */
 
 const BioText = styled.p`
   max-width: 430px;
