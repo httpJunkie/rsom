@@ -16,7 +16,7 @@ With Crystallize, you can create structured content with products of any shape a
 
 ## Testing Your Crystallize GraphQL Query
 
-Creating a place to organize your ecommerce products is simple with [Crystallize]( https://crystallize.com), just create an account in one step with a Google or Facebook user and build a Tenant. For demo purposes today, I will use a Tenant that we have already setup named `demo`.
+Creating a place to organize your ecommerce products is simple with [Crystallize](https://crystallize.com), just create an account in one step with a Google or Facebook user and build a Tenant. For demo purposes today, I will use a Tenant that we have already setup named `demo`.
 
 As the owner of a tenant on Crystallize, I can test my queries out in our [Crystallize GraphQL interface](https://api.crystallize.com/graphql) to visualize my data:
 
@@ -90,11 +90,11 @@ We need to add the files we just talked about and some supporting files.
 Create a directory named `components` and inside the `src` directory, we will add all of the following files there:
 
 
-- **illustration.js**
-- **withApolloProvide.js**
-- **IllustrationDetails.jsx**
-- **IllustrationList.jsx**
-- **IllustrationMasterDetail.jsx**
+- illustration.js
+- withApolloProvide.js
+- IllustrationDetails.jsx
+- IllustrationList.jsx
+- IllustrationMasterDetail.jsx
 - NoImage.jsx
 - Error404.jsx
 - 404.png
@@ -280,7 +280,7 @@ function NoMatch ({ location }) {
 export default NoMatch;
 ```
 
-This component that displays if no other routes are matched. We display the location they ended up and a link to get back home.
+This component that displays if no other routes are matched. We display the location they ended up at, and a link to get back home.
 
 ### src/components/NoImage.jsx
 
@@ -363,13 +363,13 @@ const WrappedComponent =
 export default WrappedComponent;
 ```
 
-We have added an import for our HOC and replaced the original export of our `IllustrationMasterDetail` component instead returning the result of the HOC. It's that simple, and one of the simplest ways to be able to reuse this **Apollo Client** with another component, If we had a similar page that showed posters, maybe a `PosterMasterDetail`, we could reuse the wrapping logic of this HOC and not duplicate code.
+We have added an import for our HOC and replaced the original export of our `IllustrationMasterDetail` component and instead we are now returning the result of the HOC. It's that simple, and one of the simplest ways to be able to reuse this **Apollo Client** with another component, If we had a similar page that showed posters, maybe a `PosterMasterDetail`, we could reuse the wrapping logic of this HOC and not duplicate code.
 
-If we step into react Dev Tools we can see that our `ApolloProvider` is now wrapped around our `IllustrationMasterDetail` component.
+If we step into React Dev Tools we can see that our `ApolloProvider` is now wrapped around our `IllustrationMasterDetail` component.
 
 ![ApolloProvider wrapping our component](images/apolloprovider.gif)
 
-Our next step is to use `gql` from  `apollo-boost` and query our GraphQL, then we will be able to render our `IllustrationList` on the left side and pass some data to it. 
+Our next step is to use `gql` from `apollo-boost` and query our GraphQL, then we will be able to render our `IllustrationList` on the left side and pass some data to it. 
 
 Before we move on, let's add the code we will need to display the product menu that will show up on the left side of the page.
 
@@ -397,11 +397,11 @@ function IllustrationList({illustrations}) {
 export default IllustrationList;
 ```
 
-All we do here is grab our `illustrations` from the data passed into our prop of the same name and use that to render out a list of `Link` components from **React Router** that will allow us to change the URL path.
+All we do here is grab our `illustrations` from the data passed into as a prop of the same name and use that data to render out a list of `Link` components from **React Router** that when clicked, will change the URL path.
 
-With that file in place we need to fetch the data to pass to it, this is a little more involved but should only take a few minutes to set up.
+With that file in place we need to fetch the data.
 
-Add the following code to `illustration.js` we are simply placing the query in it's own file for organizational purposes:
+Add the following code to `illustration.js`. We are simply placing the query in it's own file for organizational purposes:
 
 ### src/components/illustration.jsx
 
@@ -431,9 +431,7 @@ export const illustrationGql = gql`
 `;
 ```
 
-I would normally put this into a directory named `gql` and have several other files or export from this file, but we are only working with one query, so we are just going to leave it right here for simplicity. The same query we ran in GraphiQL can be used here!
-
-Let's import more code into `IllustrationMasterDetail`:
+We now will import the above code into `IllustrationMasterDetail` along with some other imports and code to help us retrieve and process the data:
 
 ### src/components/IllustrationMasterDetail.jsx
 
@@ -468,9 +466,9 @@ import IllustrationList from './IllustrationList';
   </Row>
 ```
 
-I have added three sections of code we need to update, as well I kept a few lines that don't need to be changed, this may aid you in knowing where to place each piece of code.
+I have added three sections of code we need to update, I kept a few lines that don't need to be changed to aid in knowing where to place the code.
 
-With that in place, let's update our Route in `App.js` :
+With that all in place, let's update our Route in `App.js` :
 
 ### src/App.js
 
@@ -484,7 +482,7 @@ With that in place, let's update our Route in `App.js` :
 </Switch>
 ```
 
-We have only updated the `Illustrations` Route to match on the the product link and run our project.
+We have only updated the `Illustrations` Route and gave it a new route with slug to match on the the product link. Let's run the project!
 
 `yarn start` 
 
@@ -492,7 +490,7 @@ Now our left menu (`IllustrationList`) should be on the page and working, if we 
 
 ![left side menu](images/left-side-menu.gif)
 
-This is some progress, let's add the code to the `IllustrationDetails` component:
+Next we can add the code to the `IllustrationDetails` component:
 
 ### src/components/IllustrationDetails.jsx
 
