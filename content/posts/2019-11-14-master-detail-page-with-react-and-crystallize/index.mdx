@@ -218,7 +218,7 @@ const App = () => {
 export default App;
 ```
 
-In `App.js`, we import React Router's `BrowserRouter` and `Route` components for providing route data and declarative route definitions. We also use the `Switch` component to in case a user navigates to a page other than the root `'/'` or `'Illustrations'` routes. In this case they will see our `Error404` component as it is the last route defined in the `Switch`. 
+In `App.js`, we import React Router's `BrowserRouter` and `Route` components for providing route data and declarative route definitions. We also use the `Switch` component in case a user navigates to a route other than the root `'/'` or `'Illustrations'`. In this case they will see our `Error404` component/page as it is the last route defined inside the `Switch`. 
 
 You may have noticed our Route is using a `render` prop instead of a `component` prop. This is because we want to be able to pass some props to the `IllustrationMasterDetail` component. When we use this method we need to be sure to spread the props we get from the route and pass them along too. 
 
@@ -256,7 +256,7 @@ This page is the wrapper so to speak for our Illustration UI (`IllustrationList`
 
 You will also notice that we are using `react-router-dom` for it's `Link` component and `simple-flexbox` to help with layout using their `Row` and `Column` components. You can learn more about both here: [ [React Router](https://reacttraining.com/react-router/web/guides/quick-start), [Simple Flexbox](https://www.npmjs.com/package/simple-flexbox) ]
 
-One more thing to note is that we have `{ destructured }` our props and pulled out two of them by name. The `baseURL` was passed in manually and `match` is something we get from our route props that we spread. We will need `match` to see the product route. AN example is: `/Illustrations/Birdman`. This is one of our illustrations and when that URL is loaded we need to show the correct details on the right side of the page.
+One more thing to note is that we have `{ destructured }` our props and pulled out two of them by name. The `baseURL` was passed in manually and `match` is something we get from our route props that we spread. We will need `match` to see the product route. An example is: `/Illustrations/Birdman`. This is one of our illustrations and when that URL is loaded we need to show the correct details on the right side of the page.
 
 ### src/components/Error404.jsx
 
@@ -279,7 +279,7 @@ function NoMatch ({ location }) {
 export default NoMatch;
 ```
 
-This component that displays if no other routes are matched. We display the location they ended up at, and a link to get back home.
+The component above displays only if no other routes are matched. We display the `location.pathname` that they ended up at, and a link to get back home.
 
 ### src/components/NoImage.jsx
 
@@ -308,9 +308,9 @@ const NoImage = ({ stroke = "#555", fill = "#f9f9f9" }) => {
 export default NoImage
 ```
 
-This file will be loaded initially, before the user has selected an `Illustration`. This component takes a `fill` and `stroke` prop for customization and returns an SVG. Each path of the SVG is a triangle positioned together to create a square, since they are outlined with a stroke is looks like a box with an **X** in it, I thought it would help to indicate that nothing has been selected. 
+This component will be loaded until the user has selected an `Illustration`. It takes a `fill` and `stroke` prop for customization and returns an SVG. A fun feature would be to make the width, height and viewBox custamizable.
 
-Alright, let's run our app:
+Let's not get sidetracked, let's test our app with this in place!
 
 `yarn start`
 
@@ -318,7 +318,9 @@ Alright, let's run our app:
 
 ## Adding Our Crystallize Data for Illustrations
 
-We will pass in our `IllustrationMasterdetail` component and a GraphQL URI to a higher-order-component and it will wrap our component in an **Apollo Provider** giving us the ability to make queries from our `IllustrationMasterDetail` page or any of it's child components. 
+With Apollo, we simply write a GraphQL query, and Apollo Client will take care of requesting and caching the data, we need an Apollo GraphQL Client and a declarative and context style Apollo Provider component.
+
+We will create a higher order component which is just a function that takes a component as an argument and returns a component and in our case with additional non-visual logic. 
 
 Let's get the HOC created and add the following code:
 
@@ -345,9 +347,9 @@ export default withApolloProvider;
 
 ```
 
-Our `IllustrationMasterDetail` component is being represented in this file by the `WrappedComponent`. All that is really happening here is we take a component as an argument and we return the same component wrapped in a Data Provider that exposes the Apollo Client that helps us to work with GraphQL.
+Our `IllustrationMasterDetail` component is being represented in this file by the `WrappedComponent`. We take a component as an argument and we return the same component wrapped in a Data Provider that exposes the Apollo Client.
 
-Next we will update our `IllustrationMasterDetail` component:
+So now we can do some work in our `IllustrationMasterDetail` component:
 
 ### src/components/IllustrationMasterDetail.jsx
 
@@ -362,7 +364,7 @@ const WrappedComponent =
 export default WrappedComponent;
 ```
 
-We have added an import for our HOC and replaced the original export of our `IllustrationMasterDetail` component and instead we are now returning the result of the HOC. It's that simple, and one of the simplest ways to be able to reuse this **Apollo Client** with another component, If we had a similar page that showed posters, maybe a `PosterMasterDetail`, we could reuse the wrapping logic of this HOC and not duplicate code.
+We have added an import for our HOC and replaced the original `default export` of our `IllustrationMasterDetail` component and instead returning the result of the HOC which is our component wrapped. Now if we had another component that showed posters, like: `PosterMasterDetail`, we could reuse the wrapping logic of this HOC and not duplicate code.
 
 If we step into React Dev Tools we can see that our `ApolloProvider` is now wrapped around our `IllustrationMasterDetail` component.
 
@@ -370,7 +372,7 @@ If we step into React Dev Tools we can see that our `ApolloProvider` is now wrap
 
 Our next step is to use `gql` from `apollo-boost` and query our GraphQL, then we will be able to render our `IllustrationList` on the left side and pass some data to it. 
 
-Before we move on, let's add the code we will need to display the product menu that will show up on the left side of the page.
+Ad the code below to `IllustrationList` component so that we can display the product menu that will show up on the left side of the page.
 
 ### src/components/illustrationList.jsx
 
@@ -396,11 +398,9 @@ function IllustrationList({illustrations}) {
 export default IllustrationList;
 ```
 
-All we do here is grab our `illustrations` from the data passed into as a prop of the same name and use that data to render out a list of `Link` components from **React Router** that when clicked, will change the URL path.
+All we do here is grab our `illustrations` from the prop of the same name. Use that data to render out a list of `Link` components from **React Router** that when clicked, will append `/product-name` to the URL (link is a derived hyphenated product name).
 
-With that file in place we need to fetch the data.
-
-Add the following code to `illustration.js`. We are simply placing the query in it's own file for organizational purposes:
+With that file in place we need to fetch the data that will supply it. Add the following code to `illustration.js`
 
 ### src/components/illustration.jsx
 
@@ -430,7 +430,7 @@ export const illustrationGql = gql`
 `;
 ```
 
-We now will import the above code into `IllustrationMasterDetail` along with some other imports and code to help us retrieve and process the data:
+We will import this `illustrationGql` and `withApolloProvider` into **IllustrationMasterDetail** along with some other things to help us retrieve the GraphQL data:
 
 ### src/components/IllustrationMasterDetail.jsx
 
@@ -481,11 +481,11 @@ With that all in place, let's update our Route in `App.js` :
 </Switch>
 ```
 
-We have only updated the `Illustrations` Route and gave it a new route with slug to match on the the product link. Let's run the project!
+We have updated the `Illustrations` Route with a slug to match for the the product link. Let's run the project!
 
 `yarn start` 
 
-Now our left menu (`IllustrationList`) should be on the page and working, if we click on any product, we should see the URL update!
+The left menu (`IllustrationList` component) should be working, if we click on any product, we should see the URL in the browser address bar update!
 
 ![left side menu](images/left-side-menu.gif)
 
@@ -524,16 +524,15 @@ IllustrationDetails.propTypes = {
 };
 ```
 
-What we do here is render a ternary that asks, "Is our `illustration` data `falsey` ?" if not, render the details (`product.product_image`, `product.name`, and `product.price`) otherwise, render this other block of code that contains our SVG placeholder graphic and text.
+What we do here is render a ternary that asks, "Is our `illustration` data falsey?" if not, render the details (`product.product_image`, `product.name`, and `product.price`) otherwise, render this other block of code that contains our SVG placeholder graphic and text.
 
-Also, you will notice that I used a `propType` to ensure that what is being passed into this component is of `PropTypes.object`. This is not absolutely needed for a demo, but it gives me some security that the component will be used in the right way or a decent error will be supplied.
+We check that the data being passed into the component is of `PropTypes.object`.
 
-Now let's add the final piece of code that will load this component into the right side of the page and pass some data that has filtered out all but the product we need using the JavaScript `find()` method.
+Let's add the final piece of code that will help to load our `IllustrationDetails` component and pass some data that we filtered using the JavaScript `find()` method to retrieve the slected product:
 
 ### src/components/IllustrationMasterDetail.jsx
 
 ```jsx
-import IllustrationList from './IllustrationList';
 import IllustrationDetails from './IllustrationDetails';
 
 ...
@@ -556,17 +555,15 @@ import IllustrationDetails from './IllustrationDetails';
   </Row>
 ```
 
-I have added three sections of code we need to update, as well I kept a few lines that don't need to be changed, this may aid you in knowing where to place each piece of code.
-
-With this last code update, we should be able to see everything in action now!
+I have added three sections of code we need to update. We first import `IllustrationDetails`, then we filter the existing illustations data to find the one product that matches the product we want to display the details of. Next we pass that data into the `IllustrationDetails` component. Once it receives data it goes from displaying a placeholder to the actual details for the product.
 
 ![final stage of app](images/illustration-master-detail-final.gif)
 
-I hope you learned a little more about React, Crystallize API or both. 
+The final code for the project can be found here: [httpJunkie / illustration-demo-end](https://github.com/httpJunkie/illustration-demo-end)
 
-The final code can be found here: [httpJunkie / illustration-demo-end](https://github.com/httpJunkie/illustration-demo-end)
+We hope you learned something valuable in this step by step tutorial using Crystallize API and GraphQL, I would also encourage you to check out the open source components that we have on our [developers page](https://crystallize.com/developers):
 
-We hope you liked this step by step tutorial on how to use Crystallize API and GraphQL data in your application, you should also check out the open source components that we have on our [developers page](https://crystallize.com/developers):
+Below are some more amazing rsources we thought you might be interested in!
 
 Crystallize OS React Components
 
@@ -589,4 +586,3 @@ Resources for Learning React
 - [Higher Order Components]( https://reactjs.org/docs/higher-order-components.html)
 - [Introducing Hooks](https://reactjs.org/docs/hooks-intro.html)
 - [React Community Support](https://reactjs.org/community/support.html)
-
