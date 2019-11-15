@@ -120,31 +120,23 @@ const MobileControls = styled.div`
   `}
 `;
 
-/* RSOM Override Start*/
 const ArticleBody = styled.article`
   position: relative;
   padding: 60px 0 30px;
-  padding-left: 68px;
   transition: background 0.2s linear;
 
   ${mediaqueries.desktop`
-    h2 {
-      max-width: 640px;
-    }
+    padding-left: 0;
   `}
   
   ${mediaqueries.tablet`
     padding: 70px 0 80px;
-    h2 {
-      max-width: 486px;
-    }
   `}
 
   ${mediaqueries.phablet`
     padding: 60px 0;
   `}
 `;
-/* RSOM Override End*/
 
 const NextArticle = styled(Section)`
   display: block;
@@ -188,4 +180,3 @@ const FooterNext = styled.h3`
 const FooterSpacer = styled.div`
   margin-bottom: 60px;
 `;
-/* RSOM Override End */

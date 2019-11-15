@@ -319,7 +319,7 @@ Alright, let's run our app:
 
 ## Adding Our Crystallize Data for Illustrations
 
-I tried to find a nice solution that is fairly plug and playable and not too hard to understand. My solution is to wrap our `IllustrationMasterDetail` component in an **Apollo Provider** using a higher-order-component. We will pass in our `IllustrationMasterdetail` component and a GraphQL URI to this HOC and it will wrap our component in our **Apollo Provider** giving us the ability to make queries from our `IllustrationMasterDetail` page or any of it's child components. 
+We will pass in our `IllustrationMasterdetail` component and a GraphQL URI to a higher-order-component and it will wrap our component in an **Apollo Provider** giving us the ability to make queries from our `IllustrationMasterDetail` page or any of it's child components. 
 
 Let's get the HOC created and add the following code:
 
