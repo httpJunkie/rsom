@@ -109,7 +109,7 @@ It will still be worth while going over the next section to see what's included 
 
 ## Adding The Code
 
-We will start by updating the code in the `src/App.js` file, as we add code to each file we will briefly talk about what is happening. 
+We will start by updating the code in the `src/App.js` file, as we add code to each files, I will explain what each file is doing. 
 
 ### public/index.html
 
@@ -117,7 +117,7 @@ We will start by updating the code in the `src/App.js` file, as we add code to e
 <link href="https://fonts.googleapis.com/css?family=Noto+Serif|Oxygen:300" rel="stylesheet">
 ```
 
-I have just shown the line that we need to add instead of the entire file, this is just to give us access to some nicer fonts, as well we have a CSS page below that will have all of the CSS we need for the rest of the project. This is something you can explore on your own as we will not be focusing too much on style, but we still want our demo to look clean.
+Just add the line above to the pages `<head>` above all other link tags.
 
 ### src/index.css
 
@@ -219,9 +219,9 @@ const App = () => {
 export default App;
 ```
 
-In `App.js`, we import React Router's `BrowserRouter` and `Route` components for providing route data and declarative route definitions. We also use the `Switch` component to deliver either our Illustrations component which will be shown for the default route `'/'` or our `'Illustrations'` route or an `Error404` component that works as a catchall for undefined routes. 
+In `App.js`, we import React Router's `BrowserRouter` and `Route` components for providing route data and declarative route definitions. We also use the `Switch` component to in case a user navigates to a page other than the root `'/'` or `'Illustrations'` routes. In this case they will see our `Error404` component as it is the last route defined in the `Switch`. 
 
-You may have noticed our Route is using a `render` prop instead of a `component` prop and this is because we want to be able to pass some props to the `IllustrationMasterDetail` component when we use this method we need to be sure to spread the props we get from the route and pass them along. 
+You may have noticed our Route is using a `render` prop instead of a `component` prop. This is because we want to be able to pass some props to the `IllustrationMasterDetail` component. When we use this method we need to be sure to spread the props we get from the route and pass them along too. 
 
 ### src/components/IllustrationMasterDetail.jsx
 
@@ -253,11 +253,11 @@ const IllustrationMasterDetail = ({ baseUrl, match }) => {
 export default IllustrationMasterDetail;
 ```
 
-This page is the wrapper so to speak for our Illustration UI (list and detail components). It will load both side by side, the left being a menu with a list of products and the right being a component that shows a placeholder until a product is selected. For now, we will create the layout so that we have somewhere to put these two components. 
+This page is the wrapper so to speak for our Illustration UI (`IllustrationList` and `IllustrationDetail` components). It will load each side by side, the left being a menu with a list of products and the right being a component that shows a placeholder SVG until a product is selected.
 
 You will also notice that we are using `react-router-dom` for it's `Link` component and `simple-flexbox` to help with layout using their `Row` and `Column` components. You can learn more about both here: [ [React Router](https://reacttraining.com/react-router/web/guides/quick-start), [Simple Flexbox](https://www.npmjs.com/package/simple-flexbox) ]
 
-One more thing to note is that we have `{ destructured }` our props and pulled out two of them by name. The `baseURL` was passed in manually and `match` is something we get from our route. We will need `match` in order to know when someone has selected a product and we will load the correct details based on the route, for instance, the route could be: `/Illustrations/Birdman`. This is one of our illustrations and when that URL is loaded we need to show the correct details on the right side of the page.
+One more thing to note is that we have `{ destructured }` our props and pulled out two of them by name. The `baseURL` was passed in manually and `match` is something we get from our route props that we spread. We will need `match` to see the product route. AN example is: `/Illustrations/Birdman`. This is one of our illustrations and when that URL is loaded we need to show the correct details on the right side of the page.
 
 ### src/components/Error404.jsx
 
