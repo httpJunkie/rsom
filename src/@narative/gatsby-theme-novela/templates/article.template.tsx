@@ -128,7 +128,6 @@ const ArticleBody = styled.article`
   transition: background 0.2s linear;
 
   ${mediaqueries.desktop`
-    padding-left: 53px;
     h2 {
       max-width: 640px;
     }
