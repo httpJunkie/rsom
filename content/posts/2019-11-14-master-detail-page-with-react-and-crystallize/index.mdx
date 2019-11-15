@@ -45,11 +45,11 @@ Notice the GraphQL query is a hierarchy of nested data that in a normal REST end
 }
 ```
 
-When you execute the query in GraphiQL, the result is a `data`  object at the root, inside of `data` we have a `catalogue` object with a `name` and `link`, also there is an array named `children` with the `Illustrations` we would like to work with in our master detail page.
+When you execute the query in GraphiQL, the result is a `data` object at the root. Inside of `data` we have a `catalogue` object with a `name` and `link`, also there is an array named `children` with the `Illustrations` we would like to work with in our master detail page.
 
 ## Building Our React Application
 
-We'll use Create React App to get us up and running fast. Ensure you have the [latest version of Node installed]( https://nodejs.org/en/download/ ), and use `npx` to create our React app.
+We'll use Create React App to get us up and running fast. Use `npx` to create our React app.
 
 `npx create-react-app illustration-demo`
 
@@ -57,54 +57,55 @@ Let's open this project in a code editor like Visual Studio Code!
 
 `cd crystallize-api-demo && code .`
 
-CRA uses Yarn so we will also use Yarn in our commands to build our application, let's do that!
+Create React App uses Yarn so we will too!
 
 `yarn start`
 
-We should now see our application and the component you see being displayed can be located in the `src/App.js` file:
-
-![](images/cra-app-initial.png)
+![Initial Create React App](images/cra-app-initial.png)
 
 ## Adding Dependencies
 
-We need a client to query GraphQL inside of our application, the [Apollo GraphQL Client]( https://www.apollographql.com/docs/react/ ) will be our choice for this demo, let's add it to our project. make sure that you are in the root of our new Create React App and run:
+We need a client to query GraphQL inside of our application, the [Apollo GraphQL Client](https://www.apollographql.com/docs/react) will be our choice for this demo, let's add it to our project. make sure that you are in the root directory and run:
 
 ```bash
 yarn add apollo-boost @apollo/react-hooks graphql
 ```
 
-For the purposes of the demo, we will also install `react-router-dom` to help us with basic linking and routing and a component to aid in basic flexbox layout called `simple-flexbox`:
+For the purposes of the demo, we will also install `react-router-dom` to help us with basic linking and routing. We will also use `simple-flexbox` for layout:
 
 ```bash
 yarn add react-router-dom simple-flexbox
 ```
 
-With these installed we are ready to prepare our application, let's take a look at a wireframe mockup I made to help concept and visualize what I'm trying to build.
+With these installed we are ready to prepare our app, let's take a look at a wireframe mockup I made to help concept and visualize what we will build.
 
-![](images/crystallize-master-detail-wireframe.jpg)
+![Master Detail Wireframe](images/crystallize-master-detail-wireframe.jpg)
 
-When we first visit our application, the url will be root `'/'` and our router will catch root and the `'/illustrations' ` path to a page that lists out our products as links on the left side of the page. To the right side will be a placeholder SVG in the spot where our illustration images should load, below it, we will have the text: **Select Illustration**. When a product link is clicked on we will see the image, name and price for that product appear in on the right.
+We want to match both root: `'/'` and the `'/illustrations' ` path to a component named `IllustrationMasterDetail`. We will have a product links menu on the left side of the page. To the right side will be a placeholder SVG, below it, text that reads: **Select Illustration**. When a product link is clicked on we will see the image, name and price for that product appear on the right.
 
-All of this will be housed in a component named `IllustrationMasterDetail`. The menu on the left will be a child component named: `IllustrationList` and the details on the right a sibling component named `IllustrationDetails`. We will have a few other components named `NoImage` and `Error404` which are self explanatory but I felt helped to round out the application. 
+Our `IllustrationMasterDetail` component will load two child components. To the left will be a component named: `IllustrationList` and to the right, a component named `IllustrationDetails`.
 
-We create a directory inside `src` named `components` and inside the following component files:
+We need to add the files we just talked about and some supporting files. 
 
-- Error404.jsx
+Create a directory named `components` and inside the `src` directory, we will add all of the following files there:
+
+
+- **illustration.js**
+- **withApolloProvide.js**
 - **IllustrationDetails.jsx**
 - **IllustrationList.jsx**
 - **IllustrationMasterDetail.jsx**
 - NoImage.jsx
-- **illustration.js**
-- **withApolloProvide.js**
+- Error404.jsx
 - 404.png
 
-The ones I have bolded are the most important and teach the concepts we are tackling today, but adding all of these files is important, We are keeping all files in the `components` directory for the sake of simplicity. I have also removed the `logo.svg` and `App.scss` from the Create React App demo as they are not needed.
+We are keeping all files in the `components` directory for the sake of simplicity. I have also removed the `logo.svg` and `App.scss` from the Create React App demo as they are not needed.
 
-If you want to skip past the adding of files, you can cheat with this repo, set up ready to go at this exact point in the tutorial:
+If you want to skip the adding of files, you can clone the repo below:
 
 [httpJunkie / illustration-demo-start](https://github.com/httpJunkie/illustration-demo-start)  
 
-If you start from that repo it will still be worth going over the next section to see what's included in each of the pages at this point. It helps to understand how we go about building something like this from scratch and what steps are involved.
+It will still be worth while going over the next section to see what's included in each of the pages at this point.
 
 ## Adding The Code
 
