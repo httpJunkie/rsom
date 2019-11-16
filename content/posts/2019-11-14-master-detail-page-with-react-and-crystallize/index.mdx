@@ -54,15 +54,21 @@ When you execute the query in GraphiQL, the result is a `data` object at the roo
 
 We'll use Create React App to get us up and running fast. Use `npx` to create our React app.
 
-`npx create-react-app illustration-demo`
+```bash
+npx create-react-app illustration-demo
+```
 
 Let's open this project in a code editor like Visual Studio Code!
 
-`cd illustration-demo && code .`
+```bash
+cd illustration-demo && code .
+```
 
 Create React App uses Yarn so we will too!
 
-`yarn start`
+```bash
+yarn start
+```
 
 ![Initial Create React App](images/cra-app-initial.png)
 
@@ -315,7 +321,9 @@ This component will be loaded until the user has selected an `Illustration`. It 
 
 Let's not get sidetracked, let's test our app with this in place!
 
-`yarn start`
+```bash
+yarn start
+```
 
 ![illustrator-master-detail preview](images/illustration-master-detail-one.gif)
 
@@ -347,7 +355,6 @@ const withApolloProvider = (WrappedComponent, graphqlEndpoint) => {
 };
 
 export default withApolloProvider;
-
 ```
 
 Our `IllustrationMasterDetail` component is being represented in this file by the `WrappedComponent`. We take a component as an argument and we return the same component wrapped in a Data Provider that exposes the Apollo Client.
@@ -363,7 +370,6 @@ import withApolloProvider from './withApolloProvider';
 
 const WrappedComponent = 
     withApolloProvider(IllustrationMasterDetail,'https://api.crystallize.com/graphql');
-
 export default WrappedComponent;
 ```
 
@@ -486,7 +492,9 @@ With that all in place, let's update our Route in `App.js` :
 
 We have updated the `Illustrations` Route with a slug to match for the the product link. Let's run the project!
 
-`yarn start` 
+```bash
+yarn start
+```
 
 The left menu (`IllustrationList` component) should be working, if we click on any product, we should see the URL in the browser address bar update!
 
