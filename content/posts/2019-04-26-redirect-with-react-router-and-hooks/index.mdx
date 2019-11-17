@@ -11,22 +11,52 @@ A lot of these short blog posts are just for me to find later when I forget how 
 
 To set the stage, I have an application with routing and pages already set up.
 
-![Imgur](https://i.imgur.com/y01HqkX.png)
+```jsx
+  <main>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/todos" component={Todos} />
+      <Route exact render={() => <h2 className="four-ofour">404 Page Not Found</h2>} />
+    </Switch>
+  </main>
+```
 
 
 One of the routes loads a Todo component in which I employ the `useReducer` hook in order to keep track of the todos state (local state). I have contrived a very simple feature that will redirect the user to the Home route once the Todos are cleared. Without thinking of all of the edge cases for this feature, I just want to get a basic redirect working using some basic logic, a quick and dirty example and we can iron the details out later if we want to.
 
 If we look at the `Todos.js` file, we will see that we have a function that calls `dispatch()` and sends `CLEAR_TODOS` as an action type to our reducer.
 
-![](https://i.imgur.com/tI1uX1Z.png)
+```js
+  /* After clearing Todos, 
+     wait two seconds and then set toHome to true
+     (in JSX we can render a <Redirect> component based on toHome's value) */
+  function clearTodos() {
+    dispatch({ type: 'CLEAR_TODOS' })
+    setTimeout(() => setToHome(true), 2000)
+  }
+```
  
 In my contrived example, I know that I want to at the very least redirect to Home once the user clicks on "CLEAR TODOS", in a better example I would notify the user (which I am not doing in this code) and then redirect to Home because our todo list is cleared. So what I want to do here is tap into a Hook that I will create which has a state variable named `toHome` and a related set/update method called `setToHome()`. The code below is a standard `useState` hook:
 
-![](https://i.imgur.com/We1yF3S.png)
+```js
+  /*  create a piece of state (toHome)
+      with a method to update that state (setToHome)
+      and give it a default value of false */
+  const [toHome, setToHome] = useState(false)
+```
 
 In order to make the page redirect when the `toHome` state variable is set to `true`, we just need to render a regular Redirect component from React Router and we will use a ternary statement to inline that component if true and if not, we will use `null` or render nothing:
 
-![](https://i.imgur.com/jEhMyIq.png)
+```jsx
+return (
+  <>
+   /* if (toHome) is true
+        ? then we render a React Router <Redirect> component
+        : otherwise we do null/nothing gets rendered */
+    {toHome ? <Redirect to"/" /> : null}
+  </>
+)
+```
 
 
 Here is a link to the specific commit that has this redirect setup: [4ed5c6](https://github.com/httpJunkie/react-todo/commit/4ed5c60e7a58ff021d31f05f557311eabd4a098d)
