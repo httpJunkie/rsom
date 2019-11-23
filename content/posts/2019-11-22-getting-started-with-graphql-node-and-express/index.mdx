@@ -4,8 +4,6 @@ author: Eric Bishard
 date: 2019-11-22
 hero: ./images/hero.jpg
 excerpt: Let's get started with GraphQL by creating server with Node's Express framework that can handle basic queries and mutations.
-secret: true
-slug: express-gql
 ---
 
 This is the first of a series of projects to get you familiar with using GraphQL, React and Apollo. In this tutorial I assume the following:
@@ -25,10 +23,16 @@ If you have not skimmed through these pages, you are not prepared to move forwar
 
 ## Project Setup and Dependencies
 
-Create a new directory to house our Express server and install our dependencies.
+Create a new directory to house our server initialize our npm project:
 
 ```bash
-mkdir gql-server && cd gql-server && npm init && npm i graphql express express-graphql && code .
+mkdir gql-server && cd gql-server && npm init
+```
+
+Install our dependencies and open our project in Visual Studio Code:
+
+```bash
+npm i graphql express express-graphql && code .
 ```
 
 We should now have Visual Studio Code open and our project is ready for us to start working in!
