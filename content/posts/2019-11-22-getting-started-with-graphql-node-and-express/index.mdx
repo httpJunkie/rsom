@@ -1,0 +1,322 @@
+---
+title: Getting Started with GraphQL, Node, and Express
+author: Eric Bishard 
+date: 2019-11-22
+hero: ./images/hero.jpg
+excerpt: Let's get started with GraphQL by creating server with Node's Express framework that can handle basic queries and mutations.
+secret: true
+slug: express-gql
+---
+
+This is the first of a series of projects to get you familiar with using GraphQL, React and Apollo. In this tutorial I assume the following:
+
+- You have node and npm installed
+- You are using Visual Studio Code
+- You understand HTML, CSS, and JS
+- You have read up on the basics of GraphQL
+
+The last item is very important, you should not only know where the basic documentation for GraphQL is, but you should have skimmed through the following three pages:
+
+- [Introduction](https://graphql.org/learn/)
+- [Queries and Mutations](https://graphql.org/learn/queries/)
+- [Schemas and Types](https://graphql.org/learn/schema/)
+
+If you have not skimmed through these pages, you are not prepared to move forward. At the very least I provide these pages in case you are unsure what a particular line of code is doing in this tutorial.
+
+## Project Setup and Dependencies
+
+Create a new directory to house our Express server and install our dependencies.
+
+```bash
+mkdir gql-server && cd gql-server && npm init && npm i graphql express express-graphql && code .
+```
+
+We should now have Visual Studio Code open and our project is ready for us to start working in!
+
+## Create Our Dummy Data
+
+In a new file named `blogs.js`, add an array of objects that we can use as data for our GraphQL server:
+
+```js
+module.exports = [
+  {
+    id: 1,
+    title: 'Preferred Color Scheme in React',
+    author: 'Eric Bishard',
+    topic: 'React',
+    url: 'https://www.reactstateofmind.com/preferred-color-scheme-in-react'
+  },
+  {
+    id: 2,
+    title: 'A Guide to Learning React Hooks',
+    author: 'Eric Bishard',
+    topic: 'Hooks',
+    url: 'https://www.reactstateofmind.com/a-guide-to-learning-react-hooks'
+  },
+  {
+    id: 3,
+    title: 'React Accessibility Resources',
+    author: 'Eric Bishard',
+    topic: 'React',
+    url: 'https://www.reactstateofmind.com/react-accessibility-resources'
+  },
+  {
+    id: 4,
+    title: 'React Developer Advocate',
+    author: 'Eric Bishard',
+    topic: 'Devrel',
+    url: 'https://www.reactstateofmind.com/react-developer-advocate'
+  },
+  {
+    id: 5,
+    title: 'Redirect with React Router and Hooks',
+    author: 'Eric Bishard',
+    topic: 'Hooks',
+    url: 'https://www.reactstateofmind.com/redirect-with-react-router-and-hooks'
+  },
+  {
+    id: 6,
+    title: 'Writing From a Beginner Developer\'s Perspective',
+    author: 'Eric Bishard',
+    topic: 'Writing',
+    url: 'https://www.reactstateofmind.com/writing-from-a-beginner-developer-s-perspective'
+  },
+]
+```
+
+## Create Our Resolvers 
+
+Given that we are working with data that is a basic JavaScript and understanding that our GraphQL server will have a few specific endpoints, we need a function for each endpoint to read and update our data.
+
+Given the need to keep things very basic I have decided on three endpoints: `blog`, `blogs` and `updateBlogTopic`. This is enough to show you how to query and mutate data in a GraphQL.
+
+In a new file named `resolvers.js`, add the following functions as `module.exports`:
+
+```js
+let blogData = require('./blogs')
+
+module.exports = {
+  getBlog: (args) => {
+    return blogData.find(blog => blog.id === args.id)
+  },
+  getBlogs: (args) => {
+    return args.topic 
+      ? blogData.filter(blog => blog.topic === args.topic)
+      : blogData
+  },
+  updateBlogTopic: ({id, topic}) => {
+    blogData.map(blog => {
+      return blog.id === id 
+        ? blog.topic = topic
+        : blog
+    })
+    return blogData.find(blog => blog.id === id)
+  }
+}
+```
+
+In this file we have imported the blog data from our `blogs.js` file.
+
+The first resolver `getBlog` will allow us to find a specific blog by `id`.
+
+The second resolver `getBlogs` allows getting all of the blog data if no argument is passed or we can get blogs by topic if an argument for `topic` is passed.
+
+The third resolver `updateBlogTopic` will set the topic for the blog specified to a new string.
+
+> This is not bulletproof code, it is for demo purposes only, but it illustrates how we can serve and manage our data using GraphQL and some basic resolvers.
+
+## Creating the server
+
+In order to create a GraphQL server with a minimal amount of code, we use a package called `express-graphql` that enables us to define our schema, a root type and specify if we want GraphiQL to be enabled. This highly reduces the amount of code we need to write to get our GraphQL server running.
+
+In a file named `server.js` we will combine the code needed for `express` and `graphql`.
+
+```js
+const express = require('express')
+const graphqlHTTP = require('express-graphql')
+const { buildSchema } = require('graphql')
+
+let { getBlog, getBlogs, updateBlogTopic } = require("./resolvers")
+
+const schema = buildSchema(`
+  type Query {
+    blog(id: Int!): Blog
+    blogs(topic: String): [Blog]
+  }
+  type Mutation {
+    updateBlogTopic(id: Int!, topic: String!): Blog
+  }
+  type Blog {
+    id: Int
+    title: String
+    author: String
+    topic: String
+    url: String
+  }
+`)
+
+const root = {
+  blog: getBlog,
+  blogs: getBlogs,
+  updateBlogTopic: updateBlogTopic
+}
+
+const serverPort = 4000
+const serverUrl = '/graphql'
+
+const app = express()
+app.use(serverUrl, graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true
+}))
+
+app.listen(serverPort, () => {
+  let message = `GraphQL server now running on http://localhost:${serverPort}${serverUrl}`
+  console.log(message)
+})
+```
+
+In this file we do the following:
+
+- Import our dependencies (`express`, `express-graphql` and `graphql`)
+- Import our resolvers (which in turn uses our blogs data)
+- Define our GraphQL schema, mutations, and types
+- Define our root type (Our GraphQL endpoints)
+- Create our Express server hosting our GraphQL API
+
+With this final file in place, we are ready to run our project.
+
+## Run Our Queries in GraphiQL
+
+Open your terminal and ensure you are in the main project directory and run:
+
+```bash
+node server
+```
+
+This will start our Express/GraphQL server and we can click on the link in the terminal: [http://localhost:4000/graphql](http://localhost:4000/graphql)
+
+Here we will see our GraphiQL IDE, let's test out each of our endpoints and it's capabilities!
+
+For each example, we will paste the following code into the Query or query variables panes respectively:
+
+### Get a Single Blog
+
+**Query**:
+
+```graphql
+query getSingleBlog($blogID: Int!) {
+  blog(id: $blogID) {
+    title
+    author
+    topic
+    url
+  }
+}
+```
+
+**Variables**:
+
+```graphql
+{"blogID": 1}
+```
+
+### Get Blogs by Topic
+
+**Query**:
+
+```graphql
+query getBlogsByTopic($blogTopic: String!) {
+  blogs(topic: $blogTopic) {
+    title
+    author
+    topic
+    url
+  }
+}
+```
+
+**Variables**:
+
+```graphql
+{"blogTopic": "React"}
+```
+
+### Get All Blogs
+
+**Query**:
+
+```graphql
+query {
+  blogs {
+    title
+    author
+    topic
+    url
+  }
+}
+```
+
+### Get Several Blogs by ID Using Fragments
+
+**Query**:
+
+```graphql
+query getBlogsWithFragment($blogID1: Int!, $blogID2: Int!) {
+  blog1: blog(id: $blogID1) {
+    ...blogFields
+  }
+  blog2: blog(id: $blogID2) {
+    ...blogFields
+  }
+}
+
+fragment blogFields on Blog {
+  title
+  author
+  topic
+  url
+}
+```
+
+**Variables**:
+
+```graphql
+{
+  "blogID1": 1,
+  "blogID2": 2
+}
+```
+
+### Mutate/Update Blog Topic by BlogID
+
+**Query**:
+
+```graphql
+mutation updateBlogTopic($id: Int!, $topic: String!) {
+  updateBlogTopic(id: $id, topic: $topic) {
+    ...blogFields
+  }
+}
+
+fragment blogFields on Blog {
+  title
+  author
+  topic
+  url
+}
+```
+
+**Variables**:
+
+```graphql
+{
+  "id": 2,
+  "topic": "React Hooks"
+}
+```
+
+### Summary
+
+We have walked through creating a basic GraphQL server with Node's Express framework that can handle basic queries and mutations using in-memory data, a list of blogs and learned how to setup resolvers for each endpoint and how to use the GraphiQL IDE to query and test our endpoints and data.
