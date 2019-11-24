@@ -23,7 +23,7 @@ If you have not skimmed through these pages, you are not prepared to move forwar
 
 ## Project Setup and Dependencies
 
-Create a new directory to house our server initialize our npm project:
+Create a new directory to house our server and initialize an npm project:
 
 ```bash
 mkdir gql-server && cd gql-server && npm init
@@ -39,7 +39,7 @@ We should now have Visual Studio Code open and our project is ready for us to st
 
 ## Create Our Dummy Data
 
-In a new file named `blogs.js`, add an array of objects that we can use as data for our GraphQL server:
+In a new file named `blogs.js`, add an array of objects that we can use for data in our GraphQL server:
 
 ```js
 module.exports = [
@@ -90,9 +90,9 @@ module.exports = [
 
 ## Create Our Resolvers 
 
-Given that we are working with data that is a basic JavaScript and understanding that our GraphQL server will have a few specific endpoints, we need a function for each endpoint to read and update our data.
+Our GraphQL server will have a few specific endpoints for reading and updating our data.
 
-Given the need to keep things very basic I have decided on three endpoints: `blog`, `blogs` and `updateBlogTopic`. This is enough to show you how to query and mutate data in a GraphQL.
+Given the need to keep things basic I have decided on three endpoints only: `blog`, `blogs` and `updateBlogTopic`.
 
 In a new file named `resolvers.js`, add the following functions as `module.exports`:
 
@@ -127,13 +127,13 @@ The second resolver `getBlogs` allows getting all of the blog data if no argumen
 
 The third resolver `updateBlogTopic` will set the topic for the blog specified to a new string.
 
-> This is not bulletproof code, it is for demo purposes only, but it illustrates how we can serve and manage our data using GraphQL and some basic resolvers.
+> This is not bulletproof code, it's for demo purposes, but it illustrates how we can serve and manage our data using GraphQL.
 
 ## Creating the server
 
-In order to create a GraphQL server with a minimal amount of code, we use a package called `express-graphql` that enables us to define our schema, a root type and specify if we want GraphiQL to be enabled. This highly reduces the amount of code we need to write to get our GraphQL server running.
+In order to create a GraphQL server with a minimal amount of code, we use a package called `express-graphql` that enables us to define our schema, a root type, and specify if we want the GraphiQL IDE to be enabled.
 
-In a file named `server.js` we will combine the code needed for `express` and `graphql`.
+In a file named `server.js` we will combine the code needed for `express` and `graphql` to work together.
 
 ```js
 const express = require('express')
@@ -193,7 +193,7 @@ With this final file in place, we are ready to run our project.
 
 ## Run Our Queries in GraphiQL
 
-Open your terminal and ensure you are in the main project directory and run:
+In the main project directory (targeting our `server.js` file) run:
 
 ```bash
 node server
