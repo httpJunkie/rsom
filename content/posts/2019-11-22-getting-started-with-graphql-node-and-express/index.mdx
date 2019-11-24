@@ -203,11 +203,9 @@ This will start our Express/GraphQL server and we can click on the link in the t
 
 Here we will see our GraphiQL IDE, let's test out each of our endpoints and it's capabilities!
 
-For each example, we will paste the following code into the Query or query variables panes respectively:
+For each example, we will paste the first code sample into the query pane and if a second code sample exists, it will go into the varaibles pane:
 
 ### Get a Single Blog
-
-**Query**:
 
 ```graphql
 query getSingleBlog($blogID: Int!) {
@@ -219,16 +217,11 @@ query getSingleBlog($blogID: Int!) {
   }
 }
 ```
-
-**Variables**:
-
 ```graphql
 {"blogID": 1}
 ```
 
 ### Get Blogs by Topic
-
-**Query**:
 
 ```graphql
 query getBlogsByTopic($blogTopic: String!) {
@@ -240,16 +233,11 @@ query getBlogsByTopic($blogTopic: String!) {
   }
 }
 ```
-
-**Variables**:
-
 ```graphql
 {"blogTopic": "React"}
 ```
 
 ### Get All Blogs
-
-**Query**:
 
 ```graphql
 query {
@@ -263,8 +251,6 @@ query {
 ```
 
 ### Get Several Blogs by ID Using Fragments
-
-**Query**:
 
 ```graphql
 query getBlogsWithFragment($blogID1: Int!, $blogID2: Int!) {
@@ -283,9 +269,6 @@ fragment blogFields on Blog {
   url
 }
 ```
-
-**Variables**:
-
 ```graphql
 {
   "blogID1": 1,
@@ -294,8 +277,6 @@ fragment blogFields on Blog {
 ```
 
 ### Mutate/Update Blog Topic by BlogID
-
-**Query**:
 
 ```graphql
 mutation updateBlogTopic($id: Int!, $topic: String!) {
@@ -311,9 +292,6 @@ fragment blogFields on Blog {
   url
 }
 ```
-
-**Variables**:
-
 ```graphql
 {
   "id": 2,
