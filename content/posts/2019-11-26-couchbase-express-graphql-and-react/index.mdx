@@ -113,7 +113,7 @@ node_modules
 
 Create a file named `server.js` in the root of the project and add the following code to the file:
 
-```JavaScript
+```JS
 const express = require('express')
 const graphqlHTTP = require('express-graphql')
 const { buildSchema } = require('graphql')
@@ -130,7 +130,7 @@ The frist three are needed for settign up Express and GraphQL and the last two a
 
 After adding the code above, we need to create an Express app and connect to our Couchbase Server bucket. Add the following code:
 
-```JavaScript
+```JS
 const app = express()
 const cluster  = new couchbase.Cluster("couchbase://localhost:8091/")
       cluster.authenticate("ebishard", "123456")
@@ -144,7 +144,7 @@ Everything above should look familliar, we are simply creating a connection to o
 
 Next we will add more code again and this will define the endpoints that we will use in our GraphQL Server that correspond with documents inside of our Couchbase Server bucket. Add the following code:
 
-```JavaScript
+```JS
 const schema = buildSchema(`
   type Query {
     airlinesUK: [Airline],
@@ -175,7 +175,7 @@ Now, that we have defined the two types of queries that we will expose in our Gr
 
 Add the following code to our `server.js` file:
 
-```JavaScript
+```JS
 const root = {
   airlinesUK: () => {
     let statement = 
@@ -215,7 +215,7 @@ Now that we have everything sorted out for our endpoints and queries, all we nee
 
 Add the following code to teh end of our `server.js` file:
 
-```JavaScript
+```JS
 const serverPort = 4000
 const serverUrl = '/graphql'
 app.use(serverUrl, graphqlHTTP({
@@ -261,4 +261,4 @@ Once we have the GraphQL server running we can test the `AirlinesUK` query by si
 
 As the query indicatees it will retrieve all of our UK based airlines:
 
-![travel-sample add user](/images/travel-sample-graphiql.jpg)
+![travel-sample add user](/images/travel-sample-graphiql-airlinesUK.jpg)
