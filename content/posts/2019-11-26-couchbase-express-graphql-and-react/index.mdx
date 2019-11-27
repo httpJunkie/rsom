@@ -1,0 +1,168 @@
+---
+title: Building Fullstack with Couchbase Server, Express, GraphQL and React 
+author: Eric Bishard 
+date: 2019-11-226
+hero: ./images/hero.jpg
+excerpt: Let's build a full stack JS app with Couchbase Server, Express, GraphQL and React.
+secret: true
+slug: couchbase-graphql
+---
+
+Couchbase Server can be deployed today on bare metal, AWS, Azure, Digital Ocean, GCP or containerized with Docker. It's a multi dimensional service, this means that you have the ability to choose which services run on a particular node. There is a unified programming model so they most likely support your language of choice with their many SDK's. They have one for C, .NET, Go Lang, Java, NodeJS, PHP, Python and an aplha preview that works with Scala. 
+
+This is amazing stuff, but to get started, as a web developer, I'd like to install it locally on my own machine and use NodeJS, Express and GraphQL to build a simple API. 
+
+I downloaded their Couchbase Server on my Windows machine, but the process is straight forward and the same steps I have taken can be done on your specific platform. I'll walk you through the basics of getting one of their sample databases setup locally, creating a user to connect and explain how to setup an express-graphql API to create an enpoint that we can connect to with React and and an Apollo client.
+
+Once we are done we will have a fairly simple, but fullstack JavaScript apllication from server to client and it's easy enough to do in about an hour. So let's get started with Couchbase Server.
+
+## Installing Couchbase Server
+
+We are going to follow the [Installing Couchbase Server](https://docs.couchbase.com/server/4.5/install/install-package-windows.html) instructions for Windows (Interactive Installation), but the process should be just as easy to follow along with on Linux or Mac OS X.
+
+Once installed, on all platforms, you can access the Web Console by connecting to the embedded Web server on [localhost:8091](http://localhost:8091/).
+
+From this screen you can [Setup New Cluster](https://docs.couchbase.com/server/6.0/install/init-setup.html). 
+
+The actual cluster name is not important so make it something simple and set admin user and password, this account is a full admin with read-write access to all Couchbase Server resources, it's not what you will use to connect to your database from our Node Express project though.
+
+Configure the cluster with the default service memory quotas, save and finish!
+
+We are going to now access the Dashboard once we are logged in. You can click on "Servers" to see our initially created server which will work just fine for our demo application.
+
+What we want to do though, is to click on "Buckets".
+
+A Couchbase Bucket in a sense is a document data base. But the data is stored persistently, as well as in memory. They allow data to be automatically replicated for high availability, using the Database Change Protocol (DCP). 
+
+Next, click "Add Bucket" and we want to then click "Sample Bucket". This will create a document data store and we will select `travel-sample`. This creates a buccket with indexes, this is important for our demo. We want to keep things simple and get right to querying of data from our Express API. Without the indexes setup, it would cause additional work for us and I'd rather stick to the basics for this demo.
+
+![travel-sample bucket](/images/travel-sample-bucket.jpg)
+
+If we click on the "Documents" button we can see some of the data in our Bucket:
+
+![travel-sample document](/images/travel-sample-document.jpg)
+
+And further we can click the "Edit Document as JSON" icon of a document to see a modal witht the Json for that specific entry and even edit if we would like.
+
+![travel-sample edit document](/images/travel-sample-edit-document.jpg)
+
+Great, so we have one more thing that we want to do before we move onto creating our Node Express-GraphQL API. We want to click on the "Security" tab and setup a user to connect to this bucket.
+
+Once we are on the "Security" page, let's click on "Create User" in the upper right. We need to add a username and password specific for connecting to the bucket.
+
+![travel-sample add user](/images/travel-sample-user.jpg)
+
+Make sure to check the "Application Access" checkbox for our `travel-sample` bucket. That's all we need. Remember your username and password, as we will need this to connect.
+
+## Bucket Indexes
+
+Although, for the purposes of this demo, we are not going to add or really get into bucket indexes, I wanted to choose the sample database provided by Couchbase Server because it comes setup with indexes. If we had not done this, we would have to set the indexes up on our own or worse, completely forgot to do so and spent time debuggin trying to figure out why a standard query would not work.
+
+If you want to learn more about setting up indexes on your own custom bucket, you can find that information in the [Coucbase Server documentation](). Below is in image of the indexes that are setup with our sample bucket for us.
+
+![travel-sample add user](/images/travel-sample-indexes.jpg)
+
+## A Quick Mention ABout N1QL Queries
+
+As we are not fully coveering everything in this demo I wanted to mention about the type of querying we will be using. Couchbase Server gives you the ability to use N1QL queries which is way to query our buckets using a SQL like syntax. We will use a combination of that and an API provided by the `couchbase` npm packe to do our querying. 
+
+You can find more information on [N1QL](https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html) in the documentation as well as information about using the  `couchbase.get` method of querying from the documentation for the [Couchbase Server NodeJS SDK](https://docs.couchbase.com/nodejs-sdk/current/core-operations.html#crud-overview).
+
+But, you can also just follow the tutorial and I will cover the very basics for now.
+
+## Creating Our Node, Express-GraphQL API
+
+I assume a few things in this next part of the tutorial
+
+- You have node and npm installed
+- You are using Visual Studio Code or comparable IDE
+- You understand basic JavaScript
+- You have read up on the basics of GraphQL
+
+The last item is important, you should not only know where the basic documentation for GraphQL is, but you should have skimmed through the following three pages:
+
+- [Introduction](https://graphql.org/learn/)
+- [Queries and Mutations](https://graphql.org/learn/queries/)
+- [Schemas and Types](https://graphql.org/learn/schema/)
+
+If you have not skimmed through these pages, you shoudl do so before moving forward. At the very least I provide these pages in case you are unsure what a particular line of code is doing in this tutorial.
+
+### Project Setup and Dependencies
+
+Create a directory on your machine to house our server and initialize an npm project:
+
+```bash
+mkdir couchbase-gql-server && cd couchbase-gql-server && npm init -y
+```
+
+Next, Install our dependencies and open our project in Visual Studio Code:
+
+```bash
+npm i graphql express express-graphql couchbase uuid && code .
+```
+
+This will take some time, but once it's done running, we should now have Visual Studio Code open and our project is ready for us to start working in!
+
+Create a file named `.gitignore` to the root of your project if you plan on using Git to version your project, and add at least the following line of text to that file:
+
+```gitignore
+node_modules
+```
+
+### Add Server and Set Up Our Require Statements
+
+Create a file named `server.js` in the root of the project and add the following code to the file:
+
+```JavaScript
+const express = require('express')
+const graphqlHTTP = require('express-graphql')
+const { buildSchema } = require('graphql')
+
+const couchbase = require('couchbase')
+const uuid = require('uuid')
+```
+
+This will bring everything we need to get our GraphQL server setup in five require statements. 
+
+The frist three are needed for settign up Express and GraphQL and the last two are required for querying and logging into our Couchbase Server.
+
+### Initialize Express and Connect to Our Bucket
+
+After adding the code above, we need to create an Express app and connect to our Couchbase Server bucket. Add the following code:
+
+```JavaScript
+const app = express()
+const cluster  = new couchbase.Cluster("couchbase://localhost:8091/")
+      cluster.authenticate("ebishard", "123456")
+      
+const bucket = cluster.openBucket("travel-sample")
+```
+
+Everything above should look familliar, we are simply creating a connection to our Couchbase Server cluster, authenticating with our user that we setup and opening our `travel-sample` bucket.
+
+### Create Our GraphQL Schema
+
+Next we will add more code again and this will define the endpoints that we will use in our GraphQL Server that correspond with documents inside of our Couchbase Server bucket. Add the following code:
+
+```JavaScript
+const schema = buildSchema(`
+  type Query {
+    airlinesUK: [Airline],
+    airlineByKey(id: Int!): Airline
+  }
+  type Airline {
+    id: Int,
+    callsign: String,
+    country: String,
+    iata: String,
+    icao: String,
+    name: String
+  }
+`)
+```
+
+In graphQL we have the concept of a `Query`, to show you how we can query the data in a few different ways we will fetch a list of `Airlines` in an endpoint named `airlinesUK` and we will have another enpoint that is responsible for fetching any one `Airline` by ID using the Buckets Key value, that endpoint will be called `airlineByKey` and it will take an `Airline` ID.
+
+If you remember from our Bucket images above, each document is defined by a key in the format of `airline_1234` where `1234` is the ID of the airline.
+
+![travel-sample document](/images/travel-sample-document.jpg)
