@@ -262,3 +262,34 @@ Once we have the GraphQL server running we can test the `AirlinesUK` query by si
 As the query indicatees it will retrieve all of our UK based airlines:
 
 ![travel-sample add user](/images/travel-sample-graphiql-airlinesUK.jpg)
+
+Next we will use the `airlineByKey` endpoint, in this example we will also need to create a query variable and paste it into the respective pane:
+
+```graphiQL
+  query getAirlineByKey($id: Int!) {
+    airlineByKey(id:$id){
+      id
+      name
+      callsign
+      country
+      iata
+      icao
+    }
+  }
+```
+
+```graphiQL
+  {
+    "id": 112
+  }
+```
+
+And with that in place and we can query again and retrieve a single airline document by key:
+
+![travel-sample add user](/images/travel-sample-graphiql-airlineByKey.jpg)
+
+This concludes the section for our GraphQL Server, we are now ready to create our React application that will use these endpoints to create a very small application with a master-detail page that will get all UK airlines and show them in a list and when we click on one in particular, it will show the full details of the ariline.
+
+## Creating a Master Detail page in React with Apollo
+
+WIP.. Coming soon!
