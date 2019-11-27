@@ -166,3 +166,99 @@ In graphQL we have the concept of a `Query`, to show you how we can query the da
 If you remember from our Bucket images above, each document is defined by a key in the format of `airline_1234` where `1234` is the ID of the airline.
 
 ![travel-sample document](/images/travel-sample-document.jpg)
+
+We will keep this id in mind when using the NodeJS SDK to fetch our individual `airlineByKey` as all we will need to do is use a simple `bucket.get` method to do so.
+
+### Create Our Resolver Implementation for Each endpoint
+
+Now, that we have defined the two types of queries that we will expose in our GraphQL API by way of our `schema` object, we need to provide an implementation in JavaSCript for retrieving the data fro each one from our Couchbase bucket. 
+
+Add the following code to our `server.js` file:
+
+```JavaScript
+const root = {
+  airlinesUK: () => {
+    let statement = 
+      "SELECT META(airline).id, airline.*" +
+      "FROM `travel-sample` AS airline" +
+      "WHERE airline.type = 'airline' " +
+      "AND airline.country = 'United Kingdom'"
+    let query = couchbase.N1qlQuery.fromString(statement);
+    return new Promise((resolve, reject) => 
+      bucket.query(
+        query, (error, result) => error ? reject(error) : resolve(result)
+      )
+    )
+  },
+  airlineByKey: (data) => {
+    let dbkey = "airline_" + data.id
+    return new Promise((resolve, reject) =>
+      bucket.get(
+        dbkey, (error, result) => error ? reject(error) : resolve(result.value)
+      )
+    )
+  }
+}
+```
+
+So in the example code above, we are using two different methods to query our Couchbase Server. 
+
+The first method used by the `airlinesUK` resolver uses the `bucket.query` method and in turn that takes in an N1QL or standard SQL query. This is great because if you are familliar with SQL which most of us are, it makes the barrier to entry a lot less steep when working with document dataabses in Couchbase Server.
+
+The second method used is the `bucket.get` method and in this case we are just defining the key of our document for easy retieval from our bucket. Remember that one of the great things about using a key value data store to store our documents is that we can easily pick out a single document in this way.
+
+Each of the methods above also test for query errors and either resolve or reject based on a success or error.
+
+### Creating Our Express-GraphQL Server
+
+Now that we have everything sorted out for our endpoints and queries, all we need to do is `use` our Express server and give it a port to run on, let's do that now. 
+
+Add the following code to teh end of our `server.js` file:
+
+```JavaScript
+const serverPort = 4000
+const serverUrl = '/graphql'
+app.use(serverUrl, graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true
+}))
+
+app.listen(serverPort, () => {
+  let message = `GraphQL server now running on http://localhost:${serverPort}${serverUrl}`
+  console.log(message)
+})
+```
+
+If you have ever created an Express or Express-GraphQL server, this code should look familliar. 
+
+We setup our port and graphQL url I like creating them is seperate variables for ease of use.
+
+Next we pass in our GraphQL schema and it's resolvers and set our `graphiQL` option to true. This will give us an IDE to test our GraphQL queries in and it will be available at the address: [localhost](http://localhost:4000/graphql)
+
+Finally we listen on port 4000 and set a message in the console to indicate our server is running. 
+
+Let's test this out by running:
+
+```bash
+node server
+```
+
+Once we have the GraphQL server running we can test the `AirlinesUK` query by simply pasting the following code into the GraphQL IDE query pane:
+
+```graphiQL
+  query getAirlinesUK{
+    airlinesUK {
+      id
+      name
+      callsign
+      country
+      iata
+      icao
+    }
+  }
+```
+
+As the query indicatees it will retrieve all of our UK based airlines:
+
+![travel-sample add user](/images/travel-sample-graphiql.jpg)
