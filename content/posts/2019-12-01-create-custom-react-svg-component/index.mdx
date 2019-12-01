@@ -1,0 +1,59 @@
+---
+title: Create Custom React SVG Component
+author: Eric Bishard 
+date: 2019-12-01
+hero: ./images/hero.jpg
+excerpt: Let's create a component to display any basic SVG's stroke and fill and more!
+secret: true
+slug: react-svg
+---
+
+I'm trying to write about topics like this one with very little words, just the instructions one needs to get the job done and then they can tweak the process on their own. For articles like this one, I'm going to employ some consistency, each article will have prerequisites, installation, implementation and a recap, that's it!
+
+## Prerequisites
+
+- Running Node, NPM, Git and and IDE
+- Inkscape installed
+- Basic knowledge of HTML, CSS and JS
+- Good understanding of React
+- Dope!
+
+## Creating an SVG with Text in Inkscape
+
+How you get to your design of your svg is not as important of what to do with it between Inkscape and React. I'm just going to import an already created SVG, and sijply save it to file.
+
+We are using Inkscape to simply make modifications to an existing svg or to create our own, the two animation below show me doing both. Just in case you need a visual aid.
+
+**File New** > **File Open** > **Browse File** > **Modify File in Inkscape** > **File Save As "skull.svg"**
+![import modify and save and SVG](/images/import-svg-save.gif)
+
+I got this image from </a>[Vectors by Vecteezy.com](https://www.vecteezy.com/free-vector/skull) *attribution to the original author.
+
+But what if you wanted to make an SVG that we could create in Inkscape, including text, shapes or whatever. I'm keeping it very simple, one color SVG.
+
+**File New** > **Create Text** > **Path** > **Object to path** > **File Save As "iheartsf.svg"**
+![creating SVG from text to path](/images/text-to-path-svg-save.gif)
+
+My point here is that Inkscape is that easy. YOur create something vector, you save it as svg. But we need to edit the SVG before bringing it to React and I like doing this by hand.
+
+## Removing The Trash From our SVG
+
+Not to call their meta data trash, but we don't need it and we dont' want it. Open the SVG in Visual Studio code, we are going to remove the shit we don't need from each file:
+
+## Cleaning up `iheartsf.svg`
+
+First off, we want to get rid of everything bu teh `<svg>` tag and it's contents. So remove the `<?xml version="...>` tag.
+
+Let's get rid of all `xmlns:`, `sodipodi:`, and `inkscape:` attributes and their values.
+
+Get rid of the entire tag named: `<sodipodi:namedview>`, remove that entire tag.
+
+Get rid of the entire `<metadata>` tag and all of it's content.
+
+At this point we will only have our `<svg></svg>` tags and their attributes (`version`, `id`, `width`, `height`, `viewBox`) and values.
+
+![Almost clean SVG](/images/almost-clean-svg.jpg)
+
+What I was left with was this code below:
+
+
