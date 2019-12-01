@@ -24,11 +24,6 @@ How you get to your design of your svg is not as important of what to do with it
 
 We are using Inkscape to simply make modifications to an existing svg or to create our own, the two animation below show me doing both. Just in case you need a visual aid.
 
-**File New** > **File Open** > **Browse File** > **Modify File in Inkscape** > **File Save As "skull.svg"**
-![import modify and save and SVG](/images/import-svg-save.gif)
-
-I got this image from </a>[Vectors by Vecteezy.com](https://www.vecteezy.com/free-vector/skull) *attribution to the original author.
-
 But what if you wanted to make an SVG that we could create in Inkscape, including text, shapes or whatever. I'm keeping it very simple, one color SVG.
 
 **File New** > **Create Text** > **Path** > **Object to path** > **File Save As "iheartsf.svg"**
@@ -56,4 +51,44 @@ At this point we will only have our `<svg></svg>` tags and their attributes (`ve
 
 What I was left with was this code below:
 
+```svg
+<svg version="1.1" id="svg3722" width="500" height="500" viewBox="0 0 500 500">
+  <g aria-label="I❤SF" id="iheartsf">
+    <path id="letter-i" 
+      d="m 156.71261,238.67332 q -0.4,0 -0.64,-0.24 -0.24,-0.28 -0.24,-0.68 v -26.16 q 0,
+      -0.4 0.24,-0.64 0.24,-0.28 0.64,-0.28 h 2 q 0.44,0 0.68,0.24 0.24,0.24 0.24,
+      0.68 v 26.16 q 0,0.4 -0.28,0.68 -0.24,0.24 -0.64,0.24 z"
+    />
+    <path id="symbol-heart"
+      d="m 183.17198,236.17332 q -0.3125,-1.71875 -2.5,-3.4375 -3.28125,-2.65625 -6.40625,
+      -3.4375 -3.90625,-1.09375 -5.9375,-3.28125 -2.03125,-2.34375 -2.1875,-5.9375 0.15625,
+      -3.4375 2.65625,-5.9375 2.34375,-2.1875 4.84375,-2.34375 3.4375,-0.15625 5.78125,
+      1.5625 2.1875,1.71875 3.75,5.3125 1.71875,-3.75 3.75,-5.3125 2.34375,-1.71875 5.625,
+      -1.5625 2.8125,0.15625 5.15625,2.5 2.5,2.5 2.5,5.78125 0.15625,3.59375 -2.03125,
+      5.9375 -2.03125,2.5 -5.9375,3.28125 -3.28125,0.78125 -5.78125,2.8125 -2.8125,
+      2.1875 -3.28125,4.0625 z"
+    />
+    <path id="letter-s"
+      d="m 215.61198,239.07332 q -3.28,0 -5.72,-1.04 -2.4,-1.04 -3.68,-2.72 -1.24,-1.72 -1.32,
+      -3.68 0,-0.32 0.24,-0.56 0.24,-0.24 0.6,-0.24 h 1.96 q 0.72,0 1,0.8 0.36,1.68 2.04,
+      2.92 1.72,1.2 4.88,1.2 3.4,0 5.08,-1.2 1.68,-1.2 1.68,-3.32 0,-1.36 -0.84,-2.24 -0.8,
+      -0.88 -2.44,-1.52 -1.6,-0.68 -4.84,-1.64 -3.08,-0.88 -4.92,-1.88 -1.8,-1 -2.72,
+      -2.44 -0.92,-1.48 -0.92,-3.72 0,-2.16 1.16,-3.84 1.16,-1.72 3.36,-2.68 2.2,-1 5.2,
+      -1 3.12,0 5.32,1.12 2.24,1.08 3.4,2.76 1.16,1.64 1.24,3.32 0,0.36 -0.24,0.6 -0.24,
+      0.24 -0.6,0.24 h -2 q -0.32,0 -0.6,-0.2 -0.28,-0.2 -0.4,-0.6 -0.24,-1.72 -1.92,
+      -2.84 -1.68,-1.12 -4.2,-1.12 -2.72,0 -4.32,1.08 -1.6,1.04 -1.6,3.12 0,1.4 0.72,
+      2.28 0.76,0.88 2.28,1.56 1.56,0.68 4.52,1.56 3.4,0.96 5.32,1.92 1.96,0.96 2.92,2.4 0.96,
+      1.4 0.96,3.64 0,3.76 -2.88,5.88 -2.84,2.08 -7.72,2.08 z"
+    />
+    <path id="letter-f"
+      d="m 232.33761,238.67332 q -0.4,0 -0.64,-0.24 -0.24,-0.28 -0.24,-0.68 v -26.12 q 0,
+      -0.44 0.24,-0.68 0.24,-0.28 0.64,-0.28 h 16.24 q 0.44,0 0.68,0.28 0.28,0.24 0.28,
+      0.68 v 1.48 q 0,0.4 -0.28,0.68 -0.24,0.24 -0.68,0.24 h -13.4 v 9.48 h 12.6 q 0.44,
+      0 0.68,0.28 0.28,0.24 0.28,0.64 v 1.52 q 0,0.4 -0.28,0.68 -0.28,0.24 -0.68,
+      0.24 h -12.6 v 10.88 q 0,0.4 -0.28,0.68 -0.28,0.24 -0.68,0.24 z"
+    />
+  </g>
+</svg>
+```
 
+As you can see, I removed the `style` attributes and modified the `id` value to represent teh letter that that block of code represents in our SVG.
