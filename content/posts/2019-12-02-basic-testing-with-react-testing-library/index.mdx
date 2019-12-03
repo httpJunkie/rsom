@@ -1,0 +1,27 @@
+---
+title: Create a Simple Test With React Testing Library
+author: Eric Bishard 
+date: 2019-12-02
+hero: ./images/hero.jpg
+excerpt: Working with React Testing Library to add a simple button to a page!
+secret: true
+slug: react-testing-library
+---
+
+Our Task: Add a button to our app that when clicked, updates it's label, starting at zero and increasing by one each time.
+
+Component To Build: The component we build will be amazing, it has three lines of code, It's name is `Counter.jsx` and it does the job:
+
+```jsx
+import React, { useState } from 'react'
+
+const Counter = () => {
+  const [count, setCount] = useState(0)
+  const incrementCount = () => setCount(counter => counter +1)
+  return <button onClick={incrementCount}>{count}</button>
+}
+
+export default Counter
+```
+
+So long as I have `react-testing-library` installed, and 
