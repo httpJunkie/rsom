@@ -8,16 +8,15 @@ secret: true
 slug: couchbase-graphql
 ---
 
-I just finished [an article about creating a simple Express-GraphQL server](/getting-started-with-graphql-node-and-express) fed by in-memory JSON data. And while that article teaches some of the basic fundamentals of how to work with GraphQL and Express, I wanted to add a NoSQL database and create a full-stack JavaScript application using React, Apollo, GraphQL and Express.
+I just finished [an article on creating a simple Express-GraphQL server](/getting-started-with-graphql-node-and-express) using some in-memory JSON data. And while that article teaches some of the basic fundamentals of how to work with GraphQL and Express, I wanted to add a NoSQL database to the mix and create a simple but full-stack JavaScript app using React, Apollo, GraphQL and Express. I'm coining the term ["RAGE Stack"](https://www.google.com/search?q=rage+stack+js&rlz=1C1CHBF_enUS854US854&oq=rage+stack+js) right now, I love this combo of tools and as a JavaScript developer it would behoove you too not learn everything you can about this stack in conjunction with an amazing document datastore.
 
-Why nobody coined the term ["RAGE Stack"](https://www.google.com/search?q=rage+stack+js&rlz=1C1CHBF_enUS854US854&oq=rage+stack+js) is beyond me, but this combo of tools is very powerful.
-
-I have decided to outline this process using [Couchbase Server](https://docs.couchbase.com/server/6.0/sdk/overview.html). If you are not familiar with it, check out this great podcast by some of their developer advocates: [NoSQL Podcast](https://nosql.libsyn.com/)
+I will be using [Couchbase Server](https://docs.couchbase.com/server/6.0/sdk/overview.html) as my document datastore. In fact, we pretend that we have happened upon a project that needs to connect to Couchbase Server with requirements to create a GraphQL for React to connect to. 
+If you are not familiar with [Couchbase Server](https://docs.couchbase.com/server/6.0/sdk/overview.html), check out this podcast which talks not only about Couchbase, but also every other NoSQL database out there: [NoSQL Podcast](https://nosql.libsyn.com/).
 
 Couchbase Server can be deployed on bare metal, your local dev machine, AWS, Azure, Digital Ocean, GCP or of course, containerized with Docker. It's a multidimensional service, meaning you have the ability to choose which services run what nodes. Supporting is available through SDKs in the most popular languages: [C](https://docs.couchbase.com/c-sdk/2.10/start-using-sdk.html), [.NET](https://docs.couchbase.com/dotnet-sdk/2.7/start-using-sdk.html), [Go](https://docs.couchbase.com/go-sdk/1.6/start-using-sdk.html), [Java](https://docs.couchbase.com/java-sdk/2.7/start-using-sdk.html), [NodeJS](https://docs.couchbase.com/nodejs-sdk/2.6/start-using-sdk.html), [PHP](https://docs.couchbase.com/php-sdk/2.6/start-using-sdk.html), [Python](https://docs.couchbase.com/python-sdk/2.5/start-using-sdk.html) and [Scala](https://docs.couchbase.com/scala-sdk/1.0/start-using-sdk.html).
 
 <!-- couchbase notes:
-  docs.couchbase.com/c-sdka nd others should redirect to their intro page 
+  docs.couchbase.com/c-sdka and others should redirect to their intro page 
 -->
 
 As mentioned, I want to keep it completely JavaScript! But I am also very intrigued by using a NoSQL offering that allows me to query in a SQL style syntax. I thought this was really cool and after some further digging in and trying out Couchbase, I decided that it really meets and exceeds all of my needs as a developer and of course for this simple demo.
