@@ -369,9 +369,11 @@ npm install @apollo/react-hooks apollo-boost graphql
 
 For more information on working with Apollo and GraphQL you can check out the many resources on [https://www.apollographql.com](https://www.apollographql.com/docs/react/data/queries/), this link is a perfect place to start if you want to get acclimated with making queries, just like we are doing in the React project that I have setup in the repo!
 
-One componeI am using a higher order component that I created so that I can wrap any component with my GraphQL provider, I'd like to get feedback on this if you are interested, but it's something I thought that would make working with the Apollo Client in our project easier, especially if we needed more than one component to use teh GraphQL cleint.
+Before we make changes to the React client, let's  
 
-[httpJunkie/withApolloProvider.js](https://gist.github.com/httpJunkie/d365b40f0da862569d720c97f54b1fe3)
+I am using a higher order component that I created so that I can wrap any component with my GraphQL provider, I'd like to get feedback on this if you are interested, but it's something I thought that would make working with the Apollo Client in our project easier, especially if we needed more than one component to use teh GraphQL cleint.
+
+[withApolloProvider.js](https://gist.github.com/httpJunkie/d365b40f0da862569d720c97f54b1fe3)
 ```JSX
 import React from 'react'
 import ApolloClient from 'apollo-boost'
@@ -392,12 +394,17 @@ const withApolloProvider = (WrappedComponent, graphqlEndpoint) => {
 export default withApolloProvider
 ```
 
-In our project with have a master detail component relationship, when we are at the route for `/airlines`, we display a component called `airlines.jsx`, 
-it uses React Router and when no specific `arlineId` is present in the URL:
+In our project we have a master detail component relationship, when we are at the route for `/airlines`, we display a component called `airlines.jsx`, 
+it uses React Router and when no specific `arlineId` is present in the URL like the path below:
 
 `http://localhost:3000/airlines`
 
-Our Airline component will display a list of airline on the left side of the page and a message on the right side of the page that says to select an airline. 
-Selecting an airline from the menu will load details on the right side of the page.
+It will display a list of airline on the left side and nothing on the right side of the page. 
+Selecting an airline from the menu will load details on the right side of the page. It's pretty simple, we will use the capabilities of React Router to pass the Airline name from the path we load when a menu item is clicked:
 
-> WORK IN PROGRESS ...
+`http://localhost:3000/airlines/1355`
+
+Here we will match the ID `1355` with the correct airline already in memory in our React application data and display it's appropriate Airline information "British Airways"
+
+
+> WORK IN PROGRESS ... UPDATED DAILY to see entire working project clone and run: [rage-with-couchbase](https://github.com/httpJunkie/rage-with-couchbase)
