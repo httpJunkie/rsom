@@ -373,9 +373,19 @@ Before we make changes to the React client, let's understand some of the files t
 
 ### Overview of Our Assets
 
-I am using a higher order component that I created so that I can wrap any component with my GraphQL provider, I'd like to get feedback on this if you are interested, but it's something I thought that would make working with the Apollo Client in our project easier, especially if we needed more than one component to use teh GraphQL cleint.
+We have 6 files that are not used once we clone the React app and rub it for the first time, but they are there and standing by for us.
 
-[withApolloProvider.js](https://gist.github.com/httpJunkie/d365b40f0da862569d720c97f54b1fe3)
+ - [hoc/withApolloProvider.js](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/hoc/withApolloProvider.js)
+ - [partial/airline-list.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-list.jsx)
+ - [partial/airline-details.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-details.jsx)
+ - [routes/airline-gql.js](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/routes/airline-gql.js)
+ - [utility/pagination.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/utility/pagination.jsx)
+ - [utility/pagination.scss](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/utility/pagination.scss)
+
+I am using a higher order component that I created so that I can wrap any component with my GraphQL provider, in this tutorial we are only doing that with one component (Airlin.jsx)/
+But if we had more components that needed to use the client we could easily do so with this higher order component.
+
+
 
 ```JSX
 import React from 'react'
@@ -408,6 +418,5 @@ Selecting an airline from the menu will load details on the right side of the pa
 `http://localhost:3000/airlines/1355`
 
 Here we will match the ID `1355` with the correct airline already in memory in our React application data and display it's appropriate Airline information "British Airways"
-
 
 > WORK IN PROGRESS ... UPDATED DAILY to see entire working project clone and run: [rage-with-couchbase](https://github.com/httpJunkie/rage-with-couchbase)
