@@ -547,3 +547,51 @@ And we will need to `npm install cors`. That package is on GitHub at [github.com
 
 Once that is in place, restart your Express server and React application and viola!
 
+## Running Both Server and Client using Postinstall and Concurrently
+
+Now that we have everything working, I'd like to show you a neat trick for running these two projects at the same time with one npm command!
+
+We need to initialize an npm project in our root directory, currently the root of the Git project, but the server and client both have their own independent node projects. This is fine, it will stay that way, but we are going to make the root of the project it's own npm project as well.
+
+Change directories to the root and run:
+
+```bash
+npm init -y && npm install concurrently --save-dev
+```
+
+This will initialize npm and accept all defaults (otherwise remove the `-y` flag) and install the package we need to concurrently run both projects with one command.
+
+Let's setup the scripts individually and one script to run them together using `start`, we also will use `postinstall` to run each roject's install scripts independently when the root's install is run. `postinstall` is part of [npm scripts](https://docs.npmjs.com/misc/scripts) by default. Replace the current lines in your `package.json` with: 
+
+```JSON
+"name": "rage-with-couchbase",
+"version": "0.1.0",
+"description": "Concurrently run GraphQL Express Server and React application from the rage-with-couchbase project",
+"scripts": {
+ "client": "cd react-apollo-client && npm start",
+ "server": "cd couchbase-gql-server && node server",
+ "start": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+ "postinstall": "(cd couchbase-gql-server && npm install); (cd react-apollo-client && npm install);"
+},
+```
+
+We have updated the name and description of our overall root project, set up two scripts for `client` and `server` that we can run concurrently with `npm start` on the root. Also, when someone clone's our repository, they can now run: `npm install && npm start` and it will install all packages from the three projects and afterward spin them up, so long as they have Couchbase Server running, it will all just work.
+
+## Remove Username and Password From Server
+
+One final nice touch would be to move our username and password for Couchbase Server out to its own `.env` file so that we are not shipping our username and password to GitHub for the world to see.
+
+Change directories to `couchbase-gql-server/` and install `dotenv`:
+
+```bash
+npm install dotenv --save-dev
+```
+
+Next, import `dotenv` and destructure the variables we will have set up in our `.env` file
+
+```JavaScript
+require('dotenv').config()
+const { CBSU, CBSP } = process.env
+```
+
+Update the code where we use the username and password:
