@@ -357,15 +357,7 @@ Let's run the project real quick just to make sure everything is working:
 npm install && npm start
 ```
 
-### Adding Dependencies to Work with Graphql and Apollo
-
-To work with our GraphQL we will be using three packages: `@apollo/react-hooks`, `apollo-boost`, and `graphql`, you can bring them all into your project now because they are not included yet: 
-
-```
-npm install @apollo/react-hooks apollo-boost graphql
-```
-
-For more information on working with Apollo and GraphQL you can check out the many resources on [https://www.apollographql.com](https://www.apollographql.com/docs/react/data/queries/), this link is a perfect place to start if you want to get acclimated with making queries, just like we are doing in the React project that I have set up in the repo!
+We should be able to navigate the few routes in our menu and have zero issues in the console. We are just checking to make sure we have a working app to start building on.
 
 Before we make changes to the React client, let's understand some of the files that we have in our project that are not hooked up yet to our Airline route.
 
@@ -412,15 +404,146 @@ it uses React Router and when no specific `arlineId` is present in the URL like 
 
 `http://localhost:3000/airlines`
 
-It will display a list of the airline on the left side and nothing on the right side of the page. 
+It will display a list of the airline on the left side and "Select an airline" on the right side of the page. 
 Selecting an airline from the menu will load details on the right side of the page. It's pretty simple, we will use the capabilities of React Router to pass the Airline name from the path we load when a menu item is clicked:
 
 `http://localhost:3000/airlines/1355`
 
-Here we will match the ID `1355` with the correct airline already in memory in our React application data and display its appropriate Airline information "British Airways"
+Here we will match the ID `1355` with the correct airline already in memory in our React application data and display its appropriate Airline information "British Airways".
+
+### Adding Dependencies to Work with Graphql and Apollo
+
+To work with our GraphQL we will be using three packages: `@apollo/react-hooks`, `apollo-boost`, and `graphql`, you can bring them all into your project now because they are not included yet, `cd` into your `react-apollo-client` directory and run the install for the packages we need for GraphQL and Apollo: 
+
+```
+npm install @apollo/react-hooks apollo-boost graphql
+```
+
+For more information on working with Apollo and GraphQL you can check out the many resources on [https://www.apollographql.com](https://www.apollographql.com/docs/react/data/queries/), this link is a perfect place to start if you want to get acclimated with [making queries](https://www.apollographql.com/docs/react/data/queries/#executing-a-query) using Apollo.
 
 ### Building The Master-Detail Page
 
-With these files explained somewhat, we can get started building the Airlines master-detail page. 
+With those files explained, we can get started building the Airlines master-detail page and our first thing will be to bring in some imprts that we will need:
 
-> WORK IN PROGRESS ... UPDATED DAILY to see entire working project clone and run: [rage-with-couchbase](https://github.com/httpJunkie/rage-with-couchbase)
+```JavaScript
+import { useQuery } from '@apollo/react-hooks'
+import { airlineGql } from './airline-gql'
+```
+
+We do our queries from Apollo with a Hook named `useQuery`. When we use it we need to pass it a GraphQL query string and that is exactly what the next import is all about.
+
+Inside the `airline-gql.js` file is and could be all queries needed pertaining to this GraphQL endpoint, we only have one, but by organizing in this fashion we are thinking about organization and boundaries in our application:
+
+```JavaScript
+import { gql } from 'apollo-boost'
+
+export const airlineGql = gql`
+  {
+    airlinesUK {
+      callsign
+      country
+      iata
+      icao
+      id
+      name
+    }
+  }
+`
+```
+
+Next, we import `withApolloProvider`, a higher order component.
+
+```JavaScript
+import withApolloProvider from '../hoc/withApolloProvider'
+```
+
+This will wrap our component with and Apollo Provider, give us the ability to use multiple endpoints in our project if needed (we only will use one, sorry for overengineering). 
+With that in place we need to update the export of my `airlines.jsx` file also:
+
+```JavaScript
+const WrappedComponent = withApolloProvider(Airlines, 'http://localhost:4000/graphql')
+export default WrappedComponent
+```
+
+Our first argument to the HOC is the component that we are wrapping with the provider `Airlines` (already defined in this file) and the GraphQL endpoint as a second argument.
+
+Our final imports are the two components that I have already built for you ([airline-list.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-list.jsx) and [airline-details.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-details.jsx)):
+
+```JavaScript
+import AirlineList from '../partial/airline-list'
+import AirlineDetails from '../partial/airline-details'
+```
+
+Once those two files are imported we can add their component syntax to our flexbox grid ([simple-flexbox](https://www.npmjs.com/package/simple-flexbox) that we have created helping us to easily split our page by a percentage:
+
+```JavaScript
+<Row horizontal="spaced">
+  <Column flexGrow={1} style={{ minWidth: '280px', width: '65%' }}>
+    <AirlineList airlines={airlines} />
+  </Column>
+  <Column flexGrow={1} style={{ width: '45%' }}>
+    <AirlineDetails airline={airline} />
+  </Column>
+</Row>
+```
+
+With all of this in place, we just need to deal with our data and `useQuery` returns an object from the Apollo Client with `loading`, `error`, and `data` properties we can use. We also need to match on our route path, we have access to that with React Router on the page (`match.params`).
+
+This next bit of code is going to replace the curent definition of our functional component and insert some code just before the return statement in our `Airlines` functional definition:
+
+```JavaScript
+const Airlines = ({ match }) => {
+  const airlineId = Number(match.params.id) //1
+  const { loading, error, data } = useQuery(airlineGql) //2
+
+  if (loading) return <p>Loading...</p> //3
+  if (error) return <p>Error :( <span style={{color: 'red'}}>{error.message}</span> )</p> //4
+
+  const airlines = data.airlinesUK //5
+  const airline = match.params.id ? airlines.find(a => a.id === airlineId) : null //6
+
+  return (
+```
+
+1. Here we are setting `airlineId` if the `match.params.id` returns a number and not `undefined` (do we have an ID in our route path `/airlines/1355` or not `/airlines/`?).
+2. Next we are using the GraphQL query string exported in our `airlineGql` file. Remember that it returns stuff, so we are destructuring those here as well.
+3. We return "loading" until the data has finished loading
+4. or "Error" in the case our GraphQL server is not running or has an error, etc...
+5. We capture the data for all of the airlines returned from our query into a local variable named `airlines`
+6. If `match.params.id` contains a number it means our route contains an ID, in this case we capture the data for that specific airline into a local variable named `airline` otherwise we store a null value in that variable.
+
+The `match` will work because of the way we set up our route in the `App.js` page:
+
+```JSX
+<Route exact path={["/airlines/:id", "/airlines/"]}
+  render={(props) => <Airlines {...props} />}
+/>
+```
+
+This route in effect says: Look for a route with the name `/airlines/` and anything after it will be available using the `match.params.id` syntax.
+
+If we run our project right now and our GraphQL Server is not running, we get an error that says: "Error :( Network error: Failed to fetch )" printed out on our page. So we need to go and start that server before we run our React application to test out our master-detail page.
+
+### Running Our Full Stack application
+
+At this point, we just need to ensure our Couchbase Server instance is up and running, and from the root of our project start our Express server (in turn running our GraphQL server) running `node couchbase-gql-server/server`, then run our React project using `cd react-apollo-client/ && npm start`!
+
+If you run into an error because of CORS, we need to add a few to your Express project's `server.js` file, just update with the following:
+
+```JavaScript
+const express = require('express')
+const cors = require('cors')
+const graphqlHTTP = require('express-graphql')
+const { buildSchema } = require('graphql')
+
+const couchbase = require('couchbase')
+const uuid = require('uuid')
+
+const app = express()
+app.use(cors())
+```
+
+And we will need to `npm install cors`. That package is on GitHub at [github.com/expressjs/cors](https://github.com/expressjs/cors) and more information can be found on this topic in an article titled: "[How to enable CORS for Express-GraphQL & Apollo Server](https://www.prisma.io/blog/enabling-cors-for-express-graphql-apollo-server-1ef999bfb38d)"
+
+Once that is in place, restart your Express server and React application and viola!
+
