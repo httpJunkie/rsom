@@ -11,34 +11,38 @@ slug: couchbase-graphql
 ## What Exactly Are We Building?
 
 My last article on creating a [GraphQL server in Express](/getting-started-with-graphql-node-and-express/) keeps it simple, uses in memory-data and teaches the basics of using GraphQL in Express. 
-I wanted to take that code further and add a datastore and frontend application with [React JS](https://reactjs.org/) with [React Apollo](https://www.apollographql.com/docs/react/api/react-apollo/).
+I wanted to take that code further and add a datastore and frontend application with [React JS](https://reactjs.org/) with [React Apollo](https://www.apollographql.com/docs/react/api/react-apollo/). 
 
 What I'm most excited about in this tutorial is GraphQL and teaching how easy it is to work with both React and Express, and if you have not worked with GraphQL before, this is a great way to get started. 
 As a high-level overview, GraphQL is a query language for your API, it provides granular control over data allowing developers to be flexible without unnecessary calls to the server. 
 It's a declarative way of fetching data and developers love it because it provides an alternative to working with REST apis, as well it can aid in simply working with REST apis and has a strongly typed schema. 
-Too much to talk about in an intorduction, just know that it's just very versatile and in my opinion, there is zero reasons not to learn GraphQL as a JavaScript developer.
+Too much to talk about in an intorduction, just know that it's just very versatile and in my opinion, there is zero reasons not to learn GraphQL as a JavaScript developer. 
 
-We also need a datastore, so I also wanted to introduce you to a NoSQL solution for data storage which will sit behind the server app and since NoSQL document data solutions store our JSON data jsut as we have it, we don't have to do any parsing and serialization.
+We also need a datastore, so I also wanted to introduce you to a NoSQL solution for data storage which will sit behind the server app and since NoSQL document data solutions store our JSON data jsut as we have it, we don't have to do any parsing and serialization. 
 
 We will use [Couchbase Server](https://docs.couchbase.com/server/6.0/sdk/overview.html) as our document store. 
 We will just scratch the surface of what it can do but again the intent is to get you setup with these various technologies and future blogs will go more in depth into NoSQL, document datastores, React, Express, GraphQL, let's just get introduced to the stack today! 
 
-The [Couchbase Server NodeJS SDK](https://docs.couchbase.com/nodejs-sdk/current/start-using-sdk.html) will give us the tools we need in order to connect via [Node](https://nodejs.org/) and [Express](https://expressjs.com/) to our [bucket](https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/buckets.html) (database) in Cocuhbase Server.
-No matter what language you work with, we strive to help you here at Couchbase allowing you to easily deploy on bare metal, your local dev machine, AWS, Azure, Digital Ocean, GCP or of course, containerized with Docker. It's a multidimensional service, meaning you can choose which services run what nodes. Supporting is available through SDKs in the most popular languages: [C](https://docs.couchbase.com/c-sdk/2.10/start-using-sdk.html), [.NET](https://docs.couchbase.com/dotnet-sdk/2.7/start-using-sdk.html), [Go](https://docs.couchbase.com/go-sdk/1.6/start-using-sdk.html), [Java](https://docs.couchbase.com/java-sdk/2.7/start-using-sdk.html), [NodeJS](https://docs.couchbase.com/nodejs-sdk/2.6/start-using-sdk.html), [PHP](https://docs.couchbase.com/php-sdk/2.6/start-using-sdk.html), [Python](https://docs.couchbase.com/python-sdk/2.5/start-using-sdk.html) and [Scala](https://docs.couchbase.com/scala-sdk/1.0/start-using-sdk.html). 
-Another great thing about Couchbase Server is that it builds off of your SQL skills and makes those completely transferable to a NoSQL solution using [N1QL (SQL for JSON) Database Query Language](https://www.couchbase.com/products/n1ql).
-Just understand that Couchbase Server could scale with your project unlike any other solution out there. If you need more information, reach out to me on Twitter [@httpJunkie](https://twitter.com/httpJunkie). 
+The [Couchbase Server NodeJS SDK](https://docs.couchbase.com/nodejs-sdk/current/start-using-sdk.html) provides the tools needed to connect via [Node](https://nodejs.org/) and [Express](https://expressjs.com/) to our Couchbase [bucket](https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/buckets.html). 
+No matter what language you work with, you can easily deploy on bare metal, your local dev machine, AWS, Azure, Digital Ocean, GCP or containerize it with Docker. 
+Our SDKs are available in the most popular languages: [C](https://docs.couchbase.com/c-sdk/2.10/start-using-sdk.html), [.NET](https://docs.couchbase.com/dotnet-sdk/2.7/start-using-sdk.html), [Go](https://docs.couchbase.com/go-sdk/1.6/start-using-sdk.html), [Java](https://docs.couchbase.com/java-sdk/2.7/start-using-sdk.html), [NodeJS](https://docs.couchbase.com/nodejs-sdk/2.6/start-using-sdk.html), [PHP](https://docs.couchbase.com/php-sdk/2.6/start-using-sdk.html), [Python](https://docs.couchbase.com/python-sdk/2.5/start-using-sdk.html) and [Scala](https://docs.couchbase.com/scala-sdk/1.0/start-using-sdk.html). 
+
+## We Put The SQL Back into NoSQL
+
+In Couchbase Server you can bring your SQL skills and they are transferable to our NoSQL solution using a technology that is built in called [N1QL (SQL for JSON) Database Query Language](https://www.couchbase.com/products/n1ql).
 
 Let's install Couchbase locally and then we will use Express and GraphQL to build a simple API endpoint that we can retrieve airline information, after that, we will build a React application that uses [Apollo Client](https://github.com/apollographql/apollo-client) to connect to our GraphQL server. 
 
 ## Installing Couchbase Server
 
-The installation process is straight forward and we have you covered on [Linux](https://docs.couchbase.com/server/4.0/install/install-linux.html), [Mac](https://docs.couchbase.com/server/4.0/install/macos-install.html), [Windows](https://docs.couchbase.com/server/4.0/install/install-package-windows.html). I'll walk you through it all!
+The installation process is straight forward and we have you covered on [Linux](https://docs.couchbase.com/server/4.0/install/install-linux.html), [Mac](https://docs.couchbase.com/server/4.0/install/macos-install.html), and [Windows](https://docs.couchbase.com/server/4.0/install/install-package-windows.html).
 
-I have followed the instructions for both Windows and Mac as they both have a few more steps than Linux which is the easiest. I just wanted to ensure there are no major hangups or gotchas I might need to explain and I had zero issues on both, but as always, reach out to me on Twitter [@httpJunkie](https://twitter.com/httpJunkie) with any questions if needed.
+I have verified this tutorial works on both Windows and Mac. There are no major hangups and I had zero issues on both installation of Couchbase and project setup, but I can be reached on Twitter [@httpJunkie](https://twitter.com/httpJunkie) if you have any questions.
 
 ## Logging into Your Local Couchbase Server Console
 
-Once installed, on all platforms, you can access the Web Console by connecting to the webserver on [localhost:8091](http://localhost:8091). From this screen, you can click "[Setup New Cluster](https://docs.couchbase.com/server/6.0/install/init-setup.html)".
+Once installed, on all platforms, you can access the Couchbase Server Web Console using [localhost:8091](http://localhost:8091). 
+From this screen, you can click "[Setup New Cluster](https://docs.couchbase.com/server/6.0/install/init-setup.html)".
 
 Make the cluster name something simple and setup the admin user and password, this account is a full admin with read-write access to all of your Couchbase Server resources, FYI it's not what you will use to connect to your database/bucket from our Express client that will be a user that we set up separately. 
 I Configured my cluster with the default service memory quotas. Save and Finish!
