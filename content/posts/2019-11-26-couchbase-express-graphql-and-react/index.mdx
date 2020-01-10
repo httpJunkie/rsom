@@ -10,9 +10,12 @@ slug: couchbase-graphql
 
 ## What Exactly Are We Building?
 
-I just finished [an article on creating a GraphQL server in Express](/getting-started-with-graphql-node-and-express/) keeping it simple using in-memory data. 
-While that article teaches the basics of using GraphQL in Express, I wanted to take it further and add a datastore and frontend with [React](https://reactjs.org/) by leveraging [React Apollo](https://www.apollographql.com/docs/react/api/react-apollo/).
-I love this combo of tools as it makes working with data from nearly any source very approachable.
+My last article on creating a [GraphQL server in Express](/getting-started-with-graphql-node-and-express/) keeps it simple, uses in memory-data and teaches the basics of using GraphQL in Express. 
+I wanted to take that code further and add a datastore and frontend application with [React JS](https://reactjs.org/) with [React Apollo](https://www.apollographql.com/docs/react/api/react-apollo/).
+
+GraphQL provides granular control over data allowing developers to be flexibile without unnecessary calls to the server. Developers love it because it provides an alternative to working with REST APIs, as well it can aid in simply working with REST API's instead of building complex gateway APIs that are tough to version without constant breaking changes. GraphQL provides a higher level of flexibility in API development and I hate to say that you just need to get started and build something with it if you are having any probelms understanding exactly what it does and how it may help you and your team.
+
+I also wanted to introduce my readers to a NoSQL solution for data storage, Although this project is shallow in how it teaches is each part of this full stack JavaSCript application, it's the first steps you need to take to get started with these technologies and a lot of the stuff you learn can be transferable to other NoSQL technologies.
 
 I'm using [Couchbase Server](https://docs.couchbase.com/server/6.0/sdk/overview.html) as my document datastore. 
 Although we only set up one node, Couchbase Server makes it possible to do everything you need from having a basic memory-first NoSQL datastore to cross data center replication, geo-distributed deployments, workload isolation, and much more with unmatched agility and flexibility. 
