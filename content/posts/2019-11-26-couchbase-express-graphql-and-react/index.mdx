@@ -48,7 +48,7 @@ Couchbase Server leverages your SQL skills and they are transferable when using 
 
 ## Running Couchbase Server with Docker
 
-Step 1. Get the `couchbase` image
+Get the `couchbase` image:
 
 ```bash
 docker pull couchbase
@@ -57,20 +57,22 @@ docker pull couchbase
 I have a directory on my machine called `docker-sandbox` where I will setup and run my containers from. Let's clone an existing repo to get a `dockerfile` and `configuration.sh` file that we need:
 
 ```bash
-git clone https://github.com/httpJunkie/couchbase-server && cd couchbase-server && chmod +x configure.sh
+dir=couchbase-server && git clone https://github.com/httpJunkie/"$dir" && cd "$dir" && chmod +x configure.sh
 ```
 
-Now we can run our docker comands:
+Build new image from `Dockerfile` which uses official `couchbase` image as its base:
 
 ```bash
 docker build -t couchbase-server .
 ```
 
-Now we will launch our image we just built:
+Run that new image:
 
 ```bash
-docker run -d -p 8091-8094:8091-8094 -p 11210:11210 -e CB_ADMIN_USER=Administrator -e CB_ADMIN_PASS=123456 -e CB_BUCKET=default -e CB_BUCKET_PASS= --network="bridge" --name cbs1 couchbase-server
-```
+docker run -d -p 8091-8094:8091-8094 -p 11210:11210 -e CB_ADMIN_USER=Administrator -e CB_ADMIN_PASS=123456 --network="bridge" --name cbs1 couchbase-server
+```  
+  
+At this point, we can visit [localhost:8091](http://localhost:8091) and login with the `Administrator` & `123456` username/pass.
 
 ## Installing Couchbase Server Manually
 
