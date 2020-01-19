@@ -650,6 +650,15 @@ const cluster  = new couchbase.Cluster("couchbase://localhost")
       cluster.authenticate(CBSU, CBSP)
 ```
 
+## Manually Removing Couchbase Server From Mac
+
+Just in case you need to do this for some reason, when you uninstall Couchbase Server from your Mac you will need to follow a few steps:
+
+ 1. Stop / Quit Couchbase Server from the Mac menu bar
+ 2. Use your UI to Delete Couchbase Server from Applications 
+ 3. Remove the directory at `Library/Application\ Support/Couchbase`
+ 4. Remove the directory at `Caches/com.Couchbase` (if exists)
+
 ## Project Recap
 
 We have set up a complete full-stack application and we did the entire thing with the knowledge of only JavaScript and JSON, which is amazing to me. 
