@@ -8,43 +8,34 @@ secret: true
 slug: couchbase-graphql
 ---
 
-## What Exactly Are We Building?
+## What We Are Building?
 
-In a previous article: [GraphQL server in Express](/getting-started-with-graphql-node-and-express/), I kept it simple, using in memory-data only and teaching the basics of using GraphQL in Express. 
-I want to pick up where we left off and add a datastore and frontend application using [React JS](https://reactjs.org/) and [React Apollo](https://www.apollographql.com/docs/react/api/react-apollo/). 
+A fullstack JavaScript application using [React JS](https://reactjs.org/) and [React Apollo](https://www.apollographql.com/docs/react/api/react-apollo/) on the frontend with Express, GrahpQL and COuchbase on the server. 
 
-I'm excited about two things in this tutorial, the first being GraphQL and showing how easy it is to work with in both React and Express. 
-The second is that we are going to containerize each part of the project and putting more emphasis on learning rather than setting up servers and applications.
-I am using Docker for Mac, but assuming you are working with Bash and any of the modern builds of Docker, you should be fine.
+Working with GraphQL in both React and Express is easy enough to get set up. We will have an Express server with GraphQL in a NodeJS app and we will use Docker to provision and run our Couchbse Server database with a simple one node cluster.
 
-For help with Docker visit [docs.docker.com](https://docs.docker.com/v17.12), it's not required for this tutorial, but it is the quickest way to get Couchbase (or any database) up and running.
+For help with Docker visit [docs.docker.com](https://docs.docker.com/v17.12), if you would like to download and run Couchbase locally without Docker, you can get an installation from our [downloads page](https://www.couchbase.com/downloads). 
 
 ## GraphQL High Level Overview
 
-As a high-level overview, GraphQL is a strongly typed query language for your APIs. 
-It's a declarative way of fetching data and being adoted by the developer community at large as it gives you granular control over data and saves unnecessary calls to the server. 
-There are too many reasons that GraphQL is an excellent alternative to working with a traditional REST api, one of them being it's strongly typed schema and familiarity with JSON and simple syntax.
+GraphQL is a strongly typed query language for your APIs. It's a declarative way of fetching data quickly being adoted by the JavaScript and developer community at large and unlike in a RESTful API, it allows granular control over data and saves you from making unnecessary calls to the server. 
+If you are familiar with basic JSON you will find its query syntax simple to use.
 
-One reason to get excited about using GraphQL is the in-browser IDE that we can use to test our queries:
+A wonderful perk of using GraphQL is the in-browser IDE that we can use to test our queries:
 
-![travel-sample add user](/images/travel-sample-graphiql-airlinesUK.jpg)
+![GraphiQL demo, get airlines for UK](/images/travel-sample-graphiql-airlinesUK.jpg)
 
-## Why Use a NoSQL Datastore?
-
-NoSQL is a great fit for a fullstack JavaScript project because our data is in JSON format in our application and we would like to fetch and store that data without serialization back and forth from a strucured to a destructured form.
-Other reasons are that we may already have the data we need inside a document datastore (like in this tutorial) or that our application is new and to be honest, structuring a relational database may seem like an unnecessary step when we really don't have a grasp on exactly what shape our data will be stored and used.
-All of these reasons seem to indicate that we have no reason to even think of a relational database.
+## The Couchbase Datastore
 
 We will use [Couchbase Server](https://docs.couchbase.com/server/6.0/sdk/overview.html) as our document store. 
-We will just scratch the surface of what it can do but again the intent is to get you setup with these various technologies and future blogs will go more in depth into NoSQL, document datastores, React, Express, GraphQL, let's just get introduced to the stack today! 
 
-The [Couchbase Server NodeJS SDK](https://docs.couchbase.com/nodejs-sdk/current/start-using-sdk.html) provides the tools needed to connect via [Node](https://nodejs.org/) and [Express](https://expressjs.com/) to our Couchbase [bucket](https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/buckets.html). 
-No matter what language you work with, you can easily deploy on bare metal, your local dev machine, AWS, Azure, Digital Ocean, GCP or containerize it with Docker. 
-Our SDKs are available in the most popular languages: [C](https://docs.couchbase.com/c-sdk/2.10/start-using-sdk.html), [.NET](https://docs.couchbase.com/dotnet-sdk/2.7/start-using-sdk.html), [Go](https://docs.couchbase.com/go-sdk/1.6/start-using-sdk.html), [Java](https://docs.couchbase.com/java-sdk/2.7/start-using-sdk.html), [NodeJS](https://docs.couchbase.com/nodejs-sdk/2.6/start-using-sdk.html), [PHP](https://docs.couchbase.com/php-sdk/2.6/start-using-sdk.html), [Python](https://docs.couchbase.com/python-sdk/2.5/start-using-sdk.html) and [Scala](https://docs.couchbase.com/scala-sdk/1.0/start-using-sdk.html). 
+The [Couchbase Server NodeJS SDK](https://docs.couchbase.com/nodejs-sdk/current/start-using-sdk.html) provides the tools needed to connect via [Node](https://nodejs.org/) and [Express](https://expressjs.com/) to our Couchbase Server and it's data [buckets](https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/buckets.html). 
+
+Other SDKs are available besides NodeJS, those SDKs are: [C](https://docs.couchbase.com/c-sdk/2.10/start-using-sdk.html), [.NET](https://docs.couchbase.com/dotnet-sdk/2.7/start-using-sdk.html), [Go](https://docs.couchbase.com/go-sdk/1.6/start-using-sdk.html), [Java](https://docs.couchbase.com/java-sdk/2.7/start-using-sdk.html), [NodeJS](https://docs.couchbase.com/nodejs-sdk/2.6/start-using-sdk.html), [PHP](https://docs.couchbase.com/php-sdk/2.6/start-using-sdk.html), [Python](https://docs.couchbase.com/python-sdk/2.5/start-using-sdk.html) and [Scala](https://docs.couchbase.com/scala-sdk/1.0/start-using-sdk.html). 
 
 ## Putting Your SQL Skills to Work in NoSQL
 
-Couchbase Server leverages your SQL skills and they are transferable when using the [N1QL (SQL for JSON) Database Query Language](https://www.couchbase.com/products/n1ql). Yes you heard me correctly. 
+Couchbase Server leverages your SQL skills by way of the [N1QL (SQL for JSON) Database Query Language](https://www.couchbase.com/products/n1ql) which allows you to query Couchbase, a NoSQL document datastore with a sytax nearly identicle to SQL. There are some tiny differences in complex queries but for the most part, the SQL you know and use in relational databases can be used to query Couchbase.
 
 ## Running Couchbase Server with Docker
 
@@ -57,7 +48,7 @@ docker pull couchbase
 I have a directory on my machine called `docker-sandbox` where I will setup and run my containers from. Let's clone an existing repo to get a `dockerfile` and `configuration.sh` file that we need:
 
 ```bash
-dir=couchbase-server && git clone https://github.com/httpJunkie/"$dir" && cd "$dir" && chmod +x configure.sh
+git clone https://github.com/httpJunkie/couchbase-server && cd $_ && chmod +x configure.sh
 ```
 
 Build new image from `Dockerfile` which uses official `couchbase` image as its base:
@@ -69,7 +60,7 @@ docker build -t couchbase-server .
 Run that new image:
 
 ```bash
-docker run -d -p 8091-8094:8091-8094 -p 11210:11210 -e CB_ADMIN_USER=Administrator -e CB_ADMIN_PASS=123456 --network="bridge" --name cbs1 couchbase-server
+docker run -d -p 8091-8094:8091-8094 -p 11210:11210 -e CB_ADMIN_USER=Administrator -e CB_ADMIN_PASS=password --network="bridge" --name cbs1 couchbase-server
 ```  
   
 At this point, we can visit [localhost:8091](http://localhost:8091) and login with the `Administrator` & `123456` username/pass.
@@ -78,27 +69,34 @@ At this point, we can visit [localhost:8091](http://localhost:8091) and login wi
 
 The installation process is straight forward and we have you covered on [Linux](https://docs.couchbase.com/server/4.0/install/install-linux.html), [Mac](https://docs.couchbase.com/server/4.0/install/macos-install.html), and [Windows](https://docs.couchbase.com/server/4.0/install/install-package-windows.html).
 
-I have verified this tutorial works on both Windows and Mac. There are no major hangups and I had zero issues on both installation of Couchbase and project setup, but I can be reached on Twitter [@httpJunkie](https://twitter.com/httpJunkie) if you have any questions.
-
 ## Logging into Your Local Couchbase Server Console
 
-Once installed, on all platforms, you can access the Couchbase Server Web Console using [localhost:8091](http://localhost:8091). 
+If you installed with Docker you can [skip this section]().
+
+Once installed, you can access the Couchbase Server Web Console using [localhost:8091](http://localhost:8091). 
 From this screen, you can click "[Setup New Cluster](https://docs.couchbase.com/server/6.0/install/init-setup.html)".
 
-Make the cluster name something simple and setup the admin user and password, this account is a full admin with read-write access to all of your Couchbase Server resources, FYI it's not what you will use to connect to your database/bucket from our Express client that will be a user that we set up separately. 
+Make the cluster name something simple and setup the admin user and password, this account is a 
+full admin with read-write access to all of your Couchbase Server resources, 
+FYI it's not what you will use to connect to your database/bucket from our Express client that will be a user that we set up separately. 
 I Configured my cluster with the default service memory quotas. Save and Finish!
+
+## Exploring Our Sample Bucket in the Web Console
 
 Let's access the Dashboard once logged in and click on "Servers" to see our initially created server.
 
-Next click on "Buckets". A Couchbase Bucket is a document database. The data is stored persistently, as well as in memory. This allows data to be automatically replicated for availability and uses the [Database Change Protocol (DCP)](https://developer.couchbase.com/documentation/server/3.x/admin/Concepts/dcp.html).
+Next click on "Buckets". A Couchbase Bucket is a document database. The data is stored persistently, as well as in memory. 
+This allows data to be automatically replicated for availability (see  
+[Database Change Protocol (DCP)](https://developer.couchbase.com/documentation/server/3.x/admin/Concepts/dcp.html) for a better understanding of how Couchbase handles replication).
 
-YOu could click on "Add Bucket" to create your own or to add a sample busket, and if we used Docker above then our `travel-sample` bucket is already loaded. 
+You could click on "Add Bucket" to create your own bucket or to add a sample bucket. If you used the Docker instructions above then we will already have a `travel-sample` bucket. 
+Otherwise to complete the tutorial you would need to install this sample bucket. 
 
-Using this sample database will allow us to hit the ground running in Express as we have data and indexes already setup. 
-Indexes are set up automatically in this `travel-sample` bucket saving us some time. 
+Using this sample database will allow us to hit the ground running in Express as we have data and indexes already setup. Considering we will want to use N1QL to query our data, we have to first have indexes setup.
+For us, these indexes were set up automatically when installing the `travel-sample` bucket saving us some time. But it's still a good idea to navigate to the indexes screen in Couchbase Server to ensure and see exactly what these indexes look like.
 If you want to learn more and create your own bucket and indexes, [check out this article](https://blog.couchbase.com/create-right-index-get-right-performance/)!
 
-You will now see our Bucket, just like in the image below:
+At this point,you should see our `travel-sample` bucket, just like in the image below:
 
 ![travel-sample bucket](/images/travel-sample-bucket.jpg)
 
@@ -106,35 +104,47 @@ If we click on the "Documents" button we can see some of the data in our Bucket:
 
 ![travel-sample document](/images/travel-sample-document.jpg)
 
-And further, we can click the "Edit Document as JSON" icon of a document to see the JSON for that specific key's value and even edit the data if you like.
+And further, we can click "Edit Document as JSON" to view or alter the JSON for a particular document. Remember that Couchbase is a key value store, for every key it has a value which typically will be a JSON document. 
+Theoretically it could be any blob of text, but we will only be working with JSON as our data structure. 
 
 ![travel-sample edit document](/images/travel-sample-edit-document.jpg)
 
-Before moving on, we want to click on the "Security" tab and set up a user to connect to this bucket.
+Before moving on, we want to click on the "Security" tab and set up a user to connect to this bucket. 
+In Couchbase each bucket is a coleection of data, each document can have a special type setting itself a part from other documents with a different type. 
+This is analogous to having a database with different tables in a relational database. 
+Each bucket can have a user associated with it, the user we setup will be for the purpose of connecting to this data bucket from our SDK inside of a NodeJS application.
 
-Once we are on the "Security" page, let's click on "Create User" in the upper right. We need to add a username and password specific for connecting to the bucket. In the image, I use my own name and it will match the info in the source code for the project. So remember that if you use your own name the code you copy below will need to be updated.
+Once we are on the "Security" page, let's click on "Create User" in the upper right. 
+We need to add a username and password specific for connecting to the bucket. 
+In the image, I use my own name and it will match the info in the source code for the project. 
+Remember that you will want to use your own name and update the `.env` file of the project with your own credentials. 
 
 ![travel-sample add user](/images/travel-sample-user.jpg)
 
-Make sure to check the "Application Access" checkbox for our `travel-sample` bucket. That's all we need. Remember your username and password, as we will need this to connect.
+Make sure to check the "Application Access" checkbox for our `travel-sample` bucket. That's all we need. 
+Remember your username and password, as we will need this to connect.
 
 ## Bucket Indexes
 
-For this demo, e have our indexes for the `travel-sample` database already setup. If you wanted to add more indexes, you can use an API enpoint or hop into the "Query" page and execute the SQL needed to create them. If you are familliar with SQL all of this will be easy to manage!
+For this demo, we have our indexes for the `travel-sample` database already setup. 
+If you wanted to add more indexes, you can use an API enpoint or hop into the "Query" tab inside Couchbase Server and execute the SQL needed to create the index. 
+A familliarity with SQL will make this task second nature!
 
 If you want to learn more about setting up indexes, you can find more information in this [Coucbase blog article](https://blog.couchbase.com/create-right-index-get-right-performance/) and in the [couchbase documentation](https://docs.couchbase.com/server/6.0/learn/services-and-indexes/indexes/global-secondary-indexes.html). Below is an image of the indexes that are set up with our `travel-sample` bucket.
 
 ![travel-sample add user](/images/travel-sample-indexes.jpg)
 
 ## A Quick Mention about N1QL Queries
+ 
+Couchbase Server gives you the ability to use N1QL queries which is a way to query our buckets using a SQL-like syntax. 
+We will use a combination of that and an API provided by the `couchbase` npm package to do our querying. 
 
-As we are not fully covering everything in this demo so I wanted to mention the type of querying we will use. Couchbase Server gives you the ability to use N1QL queries which is a way to query our buckets using a SQL-like syntax. We will use a combination of that and an API provided by the `couchbase` npm package to do our querying. 
-
-You can find more information on [N1QL](https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html) in the documentation as well as information about using the  `couchbase.get` method of querying from the documentation for the [Couchbase Server NodeJS SDK](https://docs.couchbase.com/nodejs-sdk/current/core-operations.html#crud-overview).
+You can find more information on [N1QL](https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index.html) in the documentation as well as information about using the `couchbase.get()` method which is better for retrieving one specific record. 
+All covered in the [Couchbase Server NodeJS SDK](https://docs.couchbase.com/nodejs-sdk/current/core-operations.html#crud-overview).
 
 ## Creating Our Node, Express-GraphQL API
 
-The GraphQL documentaion is great, I reccomend reading the following:
+If you need to learn more about GraphQL, I reccomend reading the following:
 
 - [Introduction](https://graphql.org/learn/)
 - [Queries and Mutations](https://graphql.org/learn/queries/)
@@ -238,8 +248,9 @@ const schema = buildSchema(`
   }
 `)
 ```
-Each `Query` corresponds to an endpoint in the GraphQL server, and each endpoint is using a type called `Airline` which is strongly typed. 
-In short we are fetching a list of `Airlines` in an endpoint named `airlinesUK`. 
+
+Each `Query` type is the same as a regular object type, but special in the fact that they define an endpoint of every GraphQL query. We have two endpoints and each one is using a type called `Airline`. 
+The first object property is fetching a list of `Airlines` in an endpoint named `airlinesUK`. 
 In another endpoint we are fetching a single `Airline` by `id` using the Buckets key-value, that endpoint will be called `airlineByKey` and it will take an `id` and return the data in the format of type `Airline`.
 
 If you remember from our Bucket images above, each document is defined by a key in a format like `airline_1234` where `1234` is the `id` of the airline.
@@ -313,15 +324,14 @@ app.listen(serverPort, () => {
 })
 ```
 
-If you have ever created an Express or Express-GraphQL server, this code should look familiar. 
-
 First we set up our port and GraphQL URL.
 
-Next, we pass in our GraphQL schema and it's resolvers and set our `graphiql` option to true. (This will give us an IDE to test our GraphQL queries available at [localhost:4000/graphql](http://localhost:4000/graphql).
+Next, we pass in our GraphQL schema and it's resolvers and set our `graphiql` option to true. 
+(This will give us an IDE to test our GraphQL queries available at [localhost:4000/graphql](http://localhost:4000/graphql).
 
 Finally, we listen on port 4000 and set a message in the console to indicate our server is running. 
 
-Let's run our server, ensure that your COuchbase  :
+Let's run our server, ensure that your Couchbase  :
 
 ```bash
 node server
@@ -346,7 +356,7 @@ As the query indicates it will retrieve all of our UK based airlines:
 
 ![travel-sample add user](/images/travel-sample-graphiql-airlinesUK.jpg)
 
-Next, we will use the `airlineByKey` endpoint, in this example, we will also need to create a query variable and paste it into the respective pane:
+Next, we will use the `airlineByKey` endpoint. We will also need to create a query variable (`{ "id": 112 }`) and paste it into the query parameter pane which my be collapsed at the bottom of the GraphQL IDE:
 
 ```graphiQL
 query getAirlineByKey($id: Int!) {
@@ -375,9 +385,11 @@ This concludes the section for our GraphQL Server, we are now ready to create ou
 
 ## Creating the React Application
 
-The intent of this tutorial is not to teach how to build the entire React portion of the application step by step, but I want you to be able to walk away with a working React app with routing, a menu, etc..
+The intent of this tutorial is not to teach you how to build the entire React portion of the application step by step, I have prepared code for each page that you can copy and paste to save us the work.
 
-For this reason, we are going to clone an existing project into our project, it will have all of the basic setup created already with Create React App. It will have basic routing and existing components ready to hook up. What we will focus on instead is specifically the portion that deals with fetching the data from GraphQL and setting up the Apollo client using React Apollo.
+For this reason, we are going to clone an existing repo into our project, it will have all of the basic setup that I created using Create React App. 
+It will have basic routing and existing components ready to hook up. 
+What we will focus on instead is specifically the portion that deals with fetching the data from GraphQL and setting up the Apollo client using React Apollo.
 
 ### Clone an Existing React Application
 
@@ -397,19 +409,19 @@ Let's run the following git command from the `rage-with-couchbase` directory in 
 git clone https://github.com/httpJunkie/react-apollo-client.git && cd react-apollo-client && rm -rf .git
 ```
 
-This will clone the existing repo and then remove its association with my GitHub account, it's similar to just cutting and pasting in a bunch of files into our project.
+This will clone the existing repo and then remove its association with my GitHub account, it's similar to just cutting and pasting in a bunch of files and creating your own repo.
 
-Once this is done we will have a working React application with some basic routing, as well there are some components and utilities that we will hook up and will be ready for us to use.
+Once this is done we will have a working React application with basic routing, as well as some components and utilities that we will use to fill out our application.
 
-Let's run the project real quick just to make sure everything is working:
+Let's run the project to ensure everything is working:
 
 ```bash
 npm install && npm start
 ```
 
-We should be able to navigate the few routes in our menu and have zero issues in the console. We are just checking to make sure we have a working app to start building on.
+We should be able to navigate the few routes using our menu and have zero errors and warnings in the console. 
 
-Before we make changes to the React client, let's understand some of the files that we have in our project that are not hooked up yet to our Airline route.
+Before we make more changes to the this React project, let's understand some of the files that we will be bringing into our project to work with our Airline page.
 
 ### Overview of Our Assets
 
@@ -465,7 +477,7 @@ Here we will match the ID `1355` with the correct airline already in memory in o
 
 To work with our GraphQL we will be using three packages: `@apollo/react-hooks`, `apollo-boost`, and `graphql`, you can bring them all into your project now because they are not included yet, `cd` into your `react-apollo-client` directory and run the install for the packages we need for GraphQL and Apollo: 
 
-```
+```bash
 npm install @apollo/react-hooks apollo-boost graphql
 ```
 
@@ -539,7 +551,7 @@ Once those two files are imported we can add their component syntax to our flexb
 
 With all of this in place, we just need to deal with our data and `useQuery` returns an object from the Apollo Client with `loading`, `error`, and `data` properties we can use. We also need to match on our route path, we have access to that with React Router on the page (`match.params`).
 
-This next bit of code is going to replace the curent definition of our functional component and insert some code just before the return statement in our `Airlines` functional definition:
+This next bit of code will replace the curent `Airlines` component, injecting some additional code just before the return statement:
 
 ```JavaScript
 const Airlines = ({ match }) => {
@@ -663,4 +675,3 @@ Just in case you need to do this for some reason, when you uninstall Couchbase S
 
 We have set up a complete full-stack application and we did the entire thing with the knowledge of only JavaScript and JSON, which is amazing to me. 
 This application has a NoSQL data store that can scale and in future tutorials, we can build more onto this application and scale it to deploy to the cloud, replicate and distribute data to other buckets of data, implement testing, really, the sky is the limit. Its ability to be horizontally scalable is there with NoSQL, we just have to keep learning and keep building one piece at a time, if you hang around, we can do these things and learn together. If you have reached this text, it's most likely because you have completed this entire project and I want to congratulate you on your new skills and knowledge. Don't let that slip away, keep building and iterating and make awesome things, let me know on Twitter [@httpJunkie](https://www.twitter.com/httpJunkie) what you think about this tutorial and if you faced any issues!
-
