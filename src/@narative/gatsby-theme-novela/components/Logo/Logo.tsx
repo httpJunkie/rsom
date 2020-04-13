@@ -27,7 +27,6 @@ const Logo = ({ fill = "white" }) => {
 
 export default Logo;
 
-/* RSOM Override Start */
 const LogoContainer = styled.div`
   .Logo__Mobile {
     display: none;
@@ -63,4 +62,3 @@ const LogoContainer = styled.div`
     }
   `}
 `;
-/* RSOM Override End */
