@@ -1,10 +1,9 @@
 ---
 title: All the RAGE with Couchbase Server 
 author: Eric Bishard 
-date: 2019-11-226
+date: 2020-09-23
 hero: ./images/hero.jpg
-excerpt: Let's build a full stack JS app with React, Apollo, GraphQL and Express using Couchbase Server as a datastore.
-secret: true
+excerpt: Let's build a full-stack JS app with React, Apollo, GraphQL and Express using Couchbase Server as a datastore.
 slug: couchbase-graphql
 ---
 
@@ -12,13 +11,13 @@ slug: couchbase-graphql
 
 A fullstack JavaScript application using [React JS](https://reactjs.org/) and [React Apollo](https://www.apollographql.com/docs/react/api/react-apollo/) on the frontend with Express, GrahpQL and COuchbase on the server. 
 
-Working with GraphQL in both React and Express is easy enough to get set up. We will have an Express server with GraphQL in a NodeJS app and we will use Docker to provision and run our Couchbse Server database with a simple one node cluster.
+Working with GraphQL in both React and Express is easy enough to get set up. We will have an Express server with GraphQL in a NodeJS app and we will use Docker to provision and run our Couchbse Server database with a simple one-node cluster.
 
 For help with Docker visit [docs.docker.com](https://docs.docker.com/v17.12), if you would like to download and run Couchbase locally without Docker, you can get an installation from our [downloads page](https://www.couchbase.com/downloads). 
 
 ## GraphQL High Level Overview
 
-GraphQL is a strongly typed query language for your APIs. It's a declarative way of fetching data quickly being adoted by the JavaScript and developer community at large and unlike in a RESTful API, it allows granular control over data and saves you from making unnecessary calls to the server. 
+GraphQL is a strongly typed query language for your APIs. It's a declarative way of fetching data quickly being adopted by the JavaScript and developer community at large and unlike in a RESTful API, it allows granular control over data and saves you from making unnecessary calls to the server. 
 If you are familiar with basic JSON you will find its query syntax simple to use.
 
 A wonderful perk of using GraphQL is the in-browser IDE that we can use to test our queries:
@@ -35,7 +34,7 @@ Other SDKs are available besides NodeJS, those SDKs are: [C](https://docs.couchb
 
 ## Putting Your SQL Skills to Work in NoSQL
 
-Couchbase Server leverages your SQL skills by way of the [N1QL (SQL for JSON) Database Query Language](https://www.couchbase.com/products/n1ql) which allows you to query Couchbase, a NoSQL document datastore with a sytax nearly identicle to SQL. There are some tiny differences in complex queries but for the most part, the SQL you know and use in relational databases can be used to query Couchbase.
+Couchbase Server leverages your SQL skills by way of the [N1QL (SQL for JSON) Database Query Language](https://www.couchbase.com/products/n1ql) which allows you to query Couchbase, a NoSQL document datastore with a syntax nearly identical to SQL. There are some tiny differences in complex queries but for the most part, the SQL you know and use in relational databases can be used to query Couchbase.
 
 ## Running Couchbase Server with Docker
 
@@ -51,7 +50,7 @@ I have a directory on my machine called `docker-sandbox` where I will setup and 
 git clone https://github.com/httpJunkie/couchbase-server && cd $_ && chmod +x configure.sh
 ```
 
-Build new image from `Dockerfile` which uses official `couchbase` image as its base:
+Build a new image from `Dockerfile` which uses an official `couchbase` image as its base:
 
 ```bash
 docker build -t couchbase-server .
@@ -127,8 +126,8 @@ Remember your username and password, as we will need this to connect.
 ## Bucket Indexes
 
 For this demo, we have our indexes for the `travel-sample` database already setup. 
-If you wanted to add more indexes, you can use an API enpoint or hop into the "Query" tab inside Couchbase Server and execute the SQL needed to create the index. 
-A familliarity with SQL will make this task second nature!
+If you wanted to add more indexes, you can use an API endpoint or hop into the "Query" tab inside Couchbase Server and execute the SQL needed to create the index.
+A familiarity with SQL will make this task second nature!
 
 If you want to learn more about setting up indexes, you can find more information in this [Coucbase blog article](https://blog.couchbase.com/create-right-index-get-right-performance/) and in the [couchbase documentation](https://docs.couchbase.com/server/6.0/learn/services-and-indexes/indexes/global-secondary-indexes.html). Below is an image of the indexes that are set up with our `travel-sample` bucket.
 
@@ -144,7 +143,7 @@ All covered in the [Couchbase Server NodeJS SDK](https://docs.couchbase.com/node
 
 ## Creating Our Node, Express-GraphQL API
 
-If you need to learn more about GraphQL, I reccomend reading the following:
+If you need to learn more about GraphQL, I recommend reading the following:
 
 - [Introduction](https://graphql.org/learn/)
 - [Queries and Mutations](https://graphql.org/learn/queries/)
@@ -421,20 +420,20 @@ npm install && npm start
 
 We should be able to navigate the few routes using our menu and have zero errors and warnings in the console. 
 
-Before we make more changes to the this React project, let's understand some of the files that we will be bringing into our project to work with our Airline page.
+Before we make more changes to this React project, let's understand some of the files that we will be bringing into our project to work with our Airline page.
 
 ### Overview of Our Assets
 
 We have 6 files that are not used once we clone the React app and run it for the first time, but they are there and standing by for us.
 
- - [hoc/withApolloProvider.js](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/hoc/withApolloProvider.js)
- - [partial/airline-list.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-list.jsx)
- - [partial/airline-details.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-details.jsx)
- - [utility/pagination.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/utility/pagination.jsx)
- - [utility/pagination.scss](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/utility/pagination.scss)
- - [routes/airline-gql.js](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/routes/airline-gql.js)
+- [hoc/withApolloProvider.js](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/hoc/withApolloProvider.js)
+- [partial/airline-list.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-list.jsx)
+- [partial/airline-details.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/partial/airline-details.jsx)
+- [utility/pagination.jsx](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/utility/pagination.jsx)
+- [utility/pagination.scss](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/utility/pagination.scss)
+- [routes/airline-gql.js](https://github.com/httpJunkie/react-apollo-client/blob/master/src/components/routes/airline-gql.js)
 
-**withApolloProvider** - I am using a higher order component that I created so that I can wrap any component with a diferent GraphQL provider and endpoint if needed. Just understand that this is similar to importing the ApolloProvider in the parent component. This may or may not help you, I have used it in many projects and continue to use it just in case I need the exact same fnctionality. I also feel like it cleans things up and is easier mental model for me. Below is the `withApolloProvider` code:
+**withApolloProvider** - I am using a higher-order component that I created so that I can wrap any component with a diferent GraphQL provider and endpoint if needed. Just understand that this is similar to importing the ApolloProvider in the parent component. This may or may not help you, I have used it in many projects and continue to use it just in case I need the exact same fnctionality. I also feel like it cleans things up and is easier mental model for me. Below is the `withApolloProvider` code:
 
 ```JSX
 import React from 'react'
@@ -485,7 +484,7 @@ For more information on working with Apollo and GraphQL you can check out the ma
 
 ### Building The Master-Detail Page
 
-With those files explained, we can get started building the Airlines master-detail page and our first thing will be to bring in some imprts that we will need:
+With those files explained, we can get started building the Airlines master-detail page and our first thing will be to bring in some imports that we will need:
 
 ```JavaScript
 import { useQuery } from '@apollo/react-hooks'
@@ -513,7 +512,7 @@ export const airlineGql = gql`
 `
 ```
 
-Next, we import `withApolloProvider`, a higher order component.
+Next, we import `withApolloProvider`, a higher-order component.
 
 ```JavaScript
 import withApolloProvider from '../hoc/withApolloProvider'
@@ -622,7 +621,7 @@ npm init -y && npm install concurrently --save-dev
 
 This will initialize npm and accept all defaults (otherwise remove the `-y` flag) and install the package we need to concurrently run both projects with one command.
 
-Let's setup the scripts individually and one script to run them together using `start`, we also will use `postinstall` to run each roject's install scripts independently when the root's install is run. `postinstall` is part of [npm scripts](https://docs.npmjs.com/misc/scripts) by default. Replace the current lines in your `package.json` with: 
+Let's setup the scripts individually and one script to run them together using `start`, we also will use `postinstall` to run each project's install scripts independently when the root's install is run. `postinstall` is part of [npm scripts](https://docs.npmjs.com/misc/scripts) by default. Replace the current lines in your `package.json` with: 
 
 ```JSON
 "name": "rage-with-couchbase",
@@ -666,10 +665,10 @@ const cluster  = new couchbase.Cluster("couchbase://localhost")
 
 Just in case you need to do this for some reason, when you uninstall Couchbase Server from your Mac you will need to follow a few steps:
 
- 1. Stop / Quit Couchbase Server from the Mac menu bar
- 2. Use your UI to Delete Couchbase Server from Applications 
- 3. Remove the directory at `Library/Application\ Support/Couchbase`
- 4. Remove the directory at `Caches/com.Couchbase` (if exists)
+1. Stop / Quit Couchbase Server from the Mac menu bar
+2. Use your UI to Delete Couchbase Server from Applications 
+3. Remove the directory at `Library/Application\ Support/Couchbase`
+4. Remove the directory at `Caches/com.Couchbase` (if exists)
 
 ## Project Recap
 
